@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servi Deere - Reporte</title>
+    <!-- Importamos el estilo de Ionic directamente desde la nube -->
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
+    <style>
+        :root { --ion-color-primary: #367c2b; --ion-color-secondary: #ffde00; } /* Colores John Deere */
+        .logo-container { text-align: center; padding: 20px; background: #f4f4f4; }
+        .header-text { font-weight: bold; color: #367c2b; }
+    </style>
+</head>
+<body>
+    <ion-app>
+        <ion-header>
+            <ion-toolbar color="primary">
+                <ion-title>Servi Deere - Control</ion-title>
+            </ion-toolbar>
+        </ion-header>
+
+        <ion-content class="ion-padding">
+            <div class="logo-container">
+                <h1 class="header-text">REGISTRO TÉCNICO</h1>
+            </div>
+
+            <ion-list>
+                <ion-item>
+                    <ion-label position="stacked">Nombre del Cliente</ion-label>
+                    <ion-input id="nombre" placeholder="Nombre completo"></ion-input>
+                </ion-item>
+
+                <ion-item>
+                    <ion-label position="stacked">Teléfono</ion-label>
+                    <ion-input id="telefono" type="tel" placeholder="300..."></ion-input>
+                </ion-item>
+
+                <ion-item>
+                    <ion-label position="stacked">Serie de la Máquina</ion-label>
+                    <ion-input id="serie" placeholder="Ej: JD9988X"></ion-input>
+                </ion-item>
+
+                <ion-item>
+                    <ion-label position="stacked">Fecha de Servicio</ion-label>
+                    <ion-input id="fecha" type="date"></ion-input>
+                </ion-item>
+
+                <ion-item>
+                    <ion-label position="stacked">Observaciones</ion-label>
+                    <ion-textarea id="obs" rows="4" placeholder="Detalles de la reparación..."></ion-textarea>
+                </ion-item>
+            </ion-list>
+
+            <ion-button expand="block" color="secondary" onclick="tomarFoto()" style="margin-top: 20px; color: black;">
+                <ion-icon name="camera" slot="start"></ion-icon> Capturar Fotos
+            </ion-button>
+
+            <ion-button expand="block" color="success" onclick="enviarWhatsApp()">
+                <ion-icon name="logo-whatsapp" slot="start"></ion-icon> Enviar a WhatsApp
+            </ion-button>
+
+            <ion-button expand="block" fill="outline" color="dark" onclick="enviarCorreo()">
+                <ion-icon name="mail" slot="start"></ion-icon> Enviar al Correo
+            </ion-button>
+        </ion-content>
+    </ion-app>
+
+    <script>
+        function obtenerDatos() {
+            return {
+                nombre: document.getElementById('nombre').value,
+                telefono: document.getElementById('telefono').value,
+                serie: document.getElementById('serie').value,
+                fecha: document.getElementById('fecha').value,
+                obs: document.getElementById('obs').value
+            };
+        }
+
+        function enviarWhatsApp() {
+            const d = obtenerDatos();
+            const msj = `*SERVI DEERE*%0A*Cliente:* ${d.nombre}%0A*Tel:* ${d.telefono}%0A*Serie:* ${d.serie}%0A*Fecha:* ${d.fecha}%0A*Obs:* ${d.obs}`;
+            window.open(`https://wa.me/573100000000?text=${msj}`, '_blank'); // Pon tu número aquí
+        }
+
+        function enviarCorreo() {
+            const d = obtenerDatos();
+            const body = `Cliente: ${d.nombre}\nTel: ${d.telefono}\nSerie: ${d.serie}\nFecha: ${d.fecha}\nObs: ${d.obs}`;
+            window.location.href = `mailto:servideere@gmail.com?subject=Reporte Servicio ${d.serie}&body=${encodeURIComponent(body)}`;
+        }
+
+        function tomarFoto() {
+            alert("En el móvil, selecciona la cámara al subir un archivo.");
+            // Esta versión web usará el capturador nativo del celular
+        }
+    </script>
+</body>
+</html>
