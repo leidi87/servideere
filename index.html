@@ -2,43 +2,78 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>INFOTEC-SERVIDEERE</title>
     <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
     <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
     <style>
-        :root { --ion-color-primary: #367c2b; --ion-color-secondary: #ffde00; }
-        .logo-box { text-align: center; padding: 20px; background: #f4f4f4; }
-        .logo-box img { max-width: 180px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
-        .app-title { font-weight: bold; text-align: center; color: #367c2b; margin-top: 10px; }
-        ion-button { margin-top: 12px; font-weight: bold; --border-radius: 8px; }
-        .audio-preview-container { margin-top: 15px; text-align: center; }
-        audio { width: 100%; max-width: 300px; }
+        :root { 
+            --ion-color-primary: #367c2b; 
+            --ion-color-secondary: #ffde00; 
+        }
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .logo-box { 
+            text-align: center; 
+            padding: 15px; 
+            background: #f4f4f4; 
+            border-radius: 0 0 15px 15px;
+            margin-bottom: 10px;
+        }
+        .logo-box img { 
+            max-width: 140px; 
+            border-radius: 10px; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15); 
+        }
+        .app-title { 
+            font-weight: bold; 
+            text-align: center; 
+            color: #367c2b; 
+            margin-top: 8px;
+            font-size: 1.2rem;
+        }
+        ion-button { 
+            margin-top: 12px; 
+            font-weight: bold; 
+            --border-radius: 8px; 
+            height: 45px;
+        }
+        .audio-preview-container { 
+            margin: 15px 0; 
+            text-align: center; 
+            width: 100%;
+        }
+        audio { 
+            width: 100%; 
+            max-width: 100%; 
+            border-radius: 8px;
+        }
     </style>
 </head>
 <body>
     <ion-app>
         <ion-header>
             <ion-toolbar color="primary">
-                <ion-title>INFOTEC-SERVIDEERE</title>
+                <ion-title>INFOTEC-SERVIDEERE</ion-title>
             </ion-toolbar>
         </header>
 
         <ion-content class="ion-padding">
             <div class="logo-box">
-                <!-- Enlace al logo proporcionado -->
                 <img src="servi icon.jpg" alt="Logo INFOTEC-SERVIDEERE">
                 <h2 class="app-title">REGISTRO TÉCNICO</h2>
             </div>
 
-            <ion-list>
+            <ion-list lines="inset">
                 <ion-item>
                     <ion-label position="stacked">Nombre del Cliente</ion-label>
-                    <ion-input id="nombre" placeholder="Nombre completo"></ion-input>
+                    <ion-input id="nombre" type="text" placeholder="Nombre completo"></ion-input>
                 </ion-item>
                 
-                <!-- NUEVO CAMPO: CELULAR DEL CLIENTE -->
                 <ion-item>
                     <ion-label position="stacked">Celular del Cliente (WhatsApp)</ion-label>
                     <ion-input id="telCliente" type="tel" placeholder="Ej: 3151234567"></ion-input>
@@ -46,22 +81,23 @@
 
                 <ion-item>
                     <ion-label position="stacked">Serie de la Máquina</ion-label>
-                    <ion-input id="serie" placeholder="Ej: JD-2026X"></ion-input>
+                    <ion-input id="serie" type="text" placeholder="Ej: JD-2026X"></ion-input>
                 </ion-item>
+                
                 <ion-item>
                     <ion-label position="stacked">Observaciones Diagnóstico</ion-label>
                     <ion-textarea id="obs" rows="3" placeholder="Detalles del servicio..."></ion-textarea>
                 </ion-item>
             </ion-list>
 
-            <div class="ion-padding">
+            <div style="margin-top: 15px;">
                 <!-- BOTÓN FOTO -->
                 <ion-button expand="block" color="secondary" onclick="document.getElementById('fotoInput').click()" style="color: black;">
                     <ion-icon name="camera" slot="start"></ion-icon> CAPTURAR FOTO
                 </ion-button>
                 <input type="file" id="fotoInput" accept="image/*" capture="camera" style="display: none;">
 
-                <!-- BOTÓN AUDIO AUTOMÁTICO -->
+                <!-- BOTÓN AUDIO -->
                 <ion-button id="btnAudio" expand="block" color="warning" onclick="toggleGrabacionAudio()" style="color: black;">
                     <ion-icon id="iconAudio" name="mic" slot="start"></ion-icon> <span id="textAudio">GRABAR AUDIO</span>
                 </ion-button>
@@ -71,7 +107,7 @@
                     <audio id="audioPlayback" controls style="display: none;"></audio>
                 </div>
 
-                <!-- BOTÓN ENVÍO MULTICANAL REVISADO -->
+                <!-- BOTÓN ENVÍO -->
                 <ion-button expand="block" color="success" onclick="enviarReporte()">
                     <ion-icon name="paper-plane" slot="start"></ion-icon> ENVIAR REPORTE
                 </ion-button>
@@ -80,7 +116,7 @@
     </ion-app>
 
     <script>
-        // --- LOGICA DE AUDIO ---
+        // --- LÓGICA DE AUDIO ---
         let mediaRecorder;
         let audioChunks = [];
         let estadoGrabando = false;
@@ -92,7 +128,6 @@
             const reproductor = document.getElementById('audioPlayback');
 
             if (!estadoGrabando) {
-                // Iniciar Grabación
                 try {
                     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                     mediaRecorder = new MediaRecorder(stream);
@@ -106,55 +141,46 @@
                         const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
                         const audioUrl = URL.createObjectURL(audioBlob);
                         reproductor.src = audioUrl;
-                        reproductor.style.display = 'inline-block'; // Muestra el reproductor
+                        reproductor.style.display = 'block';
                     };
 
                     mediaRecorder.start();
                     estadoGrabando = true;
 
-                    // Cambios estéticos de Ionic para denotar grabación activa
                     btn.setAttribute('color', 'danger');
                     texto.innerText = "DETENER GRABACIÓN";
-                    icono.setAttribute('name', 'square'); // Ícono de stop
+                    icono.setAttribute('name', 'square');
                 } catch (err) {
                     console.error("Error al acceder al micrófono: ", err);
-                    alert("No se pudo acceder al micrófono. Verifica los permisos de tu navegador.");
+                    alert("No se pudo acceder al micrófono. Verifica los permisos.");
                 }
             } else {
-                // Detener Grabación
                 mediaRecorder.stop();
-                mediaRecorder.stream.getTracks().forEach(track => track.stop()); // Apaga el micrófono de hardware
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
                 estadoGrabando = false;
 
-                // Devolver el botón a su estado original
                 btn.setAttribute('color', 'warning');
                 texto.innerText = "GRABAR AUDIO";
                 icono.setAttribute('name', 'mic');
             }
         }
 
-        // --- LÓGICA DE ENVÍO TRIPLE (SOPORTE ➔ CLIENTE ➔ CORREO) ---
+        // --- LÓGICA DE ENVÍO TRIPLE ---
         function enviarReporte() {
             const n = document.getElementById('nombre').value || "Pendiente";
             const s = document.getElementById('serie').value || "Sin Serie";
             const o = document.getElementById('obs').value || "Sin observaciones";
             let telC = document.getElementById('telCliente').value.trim();
             
-            // Datos de destino reales
             const miNumero = "573176677848"; 
             const miCorreo = "servideere@gmail.com";
             
-            // Texto formateado para WhatsApp
             const mensajeWhatsApp = `*INFOTEC-SERVIDEERE*%0A*Cliente:* ${n}%0A*Serie:* ${s}%0A*Diagnóstico:* ${o}`;
-            
-            // Texto formateado para Correo Electrónico
             const asuntoCorreo = `Reporte Técnico - Serie: ${s}`;
             const cuerpoCorreo = `INFOTEC-SERVIDEERE%0D%0A----------------------%0D%0ACliente: ${n}%0D%0ASerie de la Máquina: ${s}%0D%0AObservaciones Diagnóstico:%0D%0A${o}`;
             
-            // 1. PASO 1: Abrir chat de soporte técnico en WhatsApp con tu número real
             window.open(`https://wa.me/${miNumero}?text=${mensajeWhatsApp}`, '_blank');
             
-            // 2. PASO 2: Gestionar envío al WhatsApp del cliente si existe el número escrito
             if (telC !== "") {
                 if (!telC.startsWith('57') && telC.length === 10) {
                     telC = '57' + telC;
@@ -165,18 +191,15 @@
                     if (confirmarWhatsAppCliente) {
                         window.open(`https://wa.me/${telC}?text=${mensajeWhatsApp}`, '_blank');
                     }
-                    // Pasar al correo después de decidir lo del cliente
                     solicitarEnvioCorreo(miCorreo, asuntoCorreo, cuerpoCorreo);
                 }, 2500);
             } else {
-                // Si no hay teléfono del cliente, pasar directo al correo
                 setTimeout(() => {
                     solicitarEnvioCorreo(miCorreo, asuntoCorreo, cuerpoCorreo);
                 }, 2500);
             }
         }
 
-        // Función encargada de lanzar la aplicación de Correo
         function solicitarEnvioCorreo(correo, asunto, cuerpo) {
             const confirmarCorreo = confirm(`¿Deseas respaldar este reporte enviándolo al correo ${correo}?`);
             if (confirmarCorreo) {
