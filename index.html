@@ -2,19 +2,71 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>INFOTEC-SERVIDEERE</title>
     <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
     <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
     <style>
-        :root { --ion-color-primary: #367c2b; --ion-color-secondary: #ffde00; }
-        .logo-box { text-align: center; padding: 20px; background: #f4f4f4; }
-        .logo-box img { max-width: 180px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
-        .app-title { font-weight: bold; text-align: center; color: #367c2b; margin-top: 10px; }
-        ion-button { margin-top: 12px; font-weight: bold; --border-radius: 8px; }
-        .audio-preview-container { margin-top: 15px; text-align: center; }
-        audio { width: 100%; max-width: 300px; }
+        :root { 
+            --ion-color-primary: #367c2b; 
+            --ion-color-secondary: #ffde00; 
+        }
+        /* Forzar que la app ocupe el 100% real de la pantalla del móvil */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container-ajustado {
+            max-width: 500px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        .logo-box { 
+            text-align: center; 
+            padding: 15px; 
+            background: #ffffff; 
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 15px;
+        }
+        .logo-box img { 
+            max-width: 130px; 
+            height: auto;
+            border-radius: 12px; 
+        }
+        .app-title { 
+            font-weight: bold; 
+            text-align: center; 
+            color: #367c2b; 
+            margin-top: 8px;
+            font-size: 1.3rem;
+            letter-spacing: 0.5px;
+        }
+        ion-item {
+            --background: #ffffff;
+            --border-radius: 8px;
+            margin-bottom: 8px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+        }
+        ion-button { 
+            margin-top: 12px; 
+            font-weight: bold; 
+            --border-radius: 8px; 
+            height: 48px;
+            font-size: 1rem;
+        }
+        .audio-preview-container { 
+            margin: 12px 0; 
+            text-align: center; 
+            width: 100%;
+        }
+        audio { 
+            width: 100%; 
+            border-radius: 8px;
+        }
     </style>
 </head>
 <body>
@@ -26,47 +78,61 @@
         </header>
 
         <ion-content class="ion-padding">
-            <div class="logo-box">
-                <img src="servi icon.jpg" alt="Logo INFOTEC-SERVIDEERE">
-                <h2 class="app-title">REGISTRO TÉCNICO</h2>
-            </div>
-
-            <ion-list>
-                <ion-item>
-                    <ion-label position="stacked">Nombre del Cliente</ion-label>
-                    <ion-input id="nombre" placeholder="Nombre completo"></ion-input>
-                </ion-item>
-                <ion-item>
-                    <ion-label position="stacked">Celular del Cliente (WhatsApp)</ion-label>
-                    <ion-input id="telCliente" type="tel" placeholder="Ej: 3151234567"></ion-input>
-                </ion-item>
-                <ion-item>
-                    <ion-label position="stacked">Serie de la Máquina</ion-label>
-                    <ion-input id="serie" placeholder="Ej: JD-2026X"></ion-input>
-                </ion-item>
-                <ion-item>
-                    <ion-label position="stacked">Observaciones Diagnóstico</ion-label>
-                    <ion-textarea id="obs" rows="3" placeholder="Detalles del servicio..."></ion-textarea>
-                </ion-item>
-            </ion-list>
-
-            <div class="ion-padding">
-                <ion-button expand="block" color="secondary" onclick="document.getElementById('fotoInput').click()" style="color: black;">
-                    <ion-icon name="camera" slot="start"></ion-icon> SELECCIONAR / TOMAR FOTO
-                </ion-button>
-                <input type="file" id="fotoInput" accept="image/*">
-
-                <ion-button id="btnAudio" expand="block" color="warning" onclick="toggleGrabacionAudio()" style="color: black;">
-                    <ion-icon id="iconAudio" name="mic" slot="start"></ion-icon> <span id="textAudio">GRABAR AUDIO EN VIVO</span>
-                </ion-button>
-
-                <div class="audio-preview-container">
-                    <audio id="audioPlayback" controls style="display: none;"></audio>
+            <div class="container-ajustado">
+                
+                <!-- CAJA DE LOGO INTEGRADA -->
+                <div class="logo-box">
+                    <img src="servi icon.jpg" alt="Logo INFOTEC-SERVIDEERE">
+                    <h2 class="app-title">REGISTRO TÉCNICO</h2>
                 </div>
 
-                <ion-button expand="block" color="success" onclick="enviarReporteAutomatico()">
-                    <ion-icon name="paper-plane" slot="start"></ion-icon> ENVIAR AUTOMÁTICAMENTE
-                </ion-button>
+                <!-- FORMULARIO DE ENTRADA -->
+                <ion-list lines="none" style="background: transparent;">
+                    <ion-item>
+                        <ion-label position="stacked">Nombre del Cliente</ion-label>
+                        <ion-input id="nombre" type="text" placeholder="Nombre completo"></ion-input>
+                    </ion-item>
+                    
+                    <ion-item>
+                        <ion-label position="stacked">Celular del Cliente (WhatsApp)</ion-label>
+                        <ion-input id="telCliente" type="tel" placeholder="Ej: 3151234567"></ion-input>
+                    </ion-item>
+
+                    <ion-item>
+                        <ion-label position="stacked">Serie de la Máquina</ion-label>
+                        <ion-input id="serie" type="text" placeholder="Ej: JD-2026X"></ion-input>
+                    </ion-item>
+                    
+                    <ion-item>
+                        <ion-label position="stacked">Observaciones Diagnóstico</ion-label>
+                        <ion-textarea id="obs" rows="3" placeholder="Detalles del servicio..."></ion-textarea>
+                    </ion-item>
+                </ion-list>
+
+                <!-- BOTONES DE ACCIÓN -->
+                <div style="margin-top: 10px; padding-bottom: 20px;">
+                    <!-- BOTÓN FOTO -->
+                    <ion-button expand="block" color="secondary" onclick="document.getElementById('fotoInput').click()" style="color: black;">
+                        <ion-icon name="camera" slot="start"></ion-icon> SELECCIONAR / TOMAR FOTO
+                    </ion-button>
+                    <input type="file" id="fotoInput" accept="image/*" style="display: none;">
+
+                    <!-- BOTÓN AUDIO -->
+                    <ion-button id="btnAudio" expand="block" color="warning" onclick="toggleGrabacionAudio()" style="color: black;">
+                        <ion-icon id="iconAudio" name="mic" slot="start"></ion-icon> <span id="textAudio">GRABAR AUDIO EN VIVO</span>
+                    </ion-button>
+
+                    <!-- REPRODUCTOR DE AUDIO -->
+                    <div class="audio-preview-container">
+                        <audio id="audioPlayback" controls style="display: none;"></audio>
+                    </div>
+
+                    <!-- BOTÓN ENVÍO AUTOMÁTICO (HACIA TU BACKEND LOCAL) -->
+                    <ion-button expand="block" color="success" onclick="enviarReporteAutomatico()">
+                        <ion-icon name="paper-plane" slot="start"></ion-icon> ENVIAR AUTOMÁTICAMENTE
+                    </ion-button>
+                </div>
+
             </div>
         </ion-content>
     </ion-app>
@@ -75,7 +141,7 @@
         let mediaRecorder;
         let audioChunks = [];
         let estadoGrabando = false;
-        let audioBlobFinal = null; // Guardará el binario del audio grabado
+        let audioBlobFinal = null;
 
         async function toggleGrabacionAudio() {
             const btn = document.getElementById('btnAudio');
@@ -93,7 +159,7 @@
                     mediaRecorder.onstop = () => {
                         audioBlobFinal = new Blob(audioChunks, { type: 'audio/mp3' });
                         reproductor.src = URL.createObjectURL(audioBlobFinal);
-                        reproductor.style.display = 'inline-block';
+                        reproductor.style.display = 'block';
                     };
 
                     mediaRecorder.start();
@@ -102,7 +168,7 @@
                     texto.innerText = "DETENER GRABACIÓN";
                     icono.setAttribute('name', 'square');
                 } catch (err) {
-                    alert("Verifica los permisos del micrófono.");
+                    alert("Por favor, permite el acceso al micrófono en tu navegador.");
                 }
             } else {
                 mediaRecorder.stop();
@@ -114,7 +180,6 @@
             }
         }
 
-        // --- FUNCIÓN ASÍNCRONA DE ENVÍO DIRECTO AL BACKEND ---
         async function enviarReporteAutomatico() {
             const nombre = document.getElementById('nombre').value;
             const serie = document.getElementById('serie').value;
@@ -122,27 +187,24 @@
             const telCliente = document.getElementById('telCliente').value;
             const fotoInput = document.getElementById('fotoInput');
 
-            // Creamos un contenedor de formulario Multipart (necesario para transportar archivos binarizados)
             const formData = new FormData();
             formData.append('cliente', nombre);
             formData.append('serie', serie);
             formData.append('observaciones', obs);
             formData.append('telefonoCliente', telCliente);
 
-            // Adjuntar foto si fue seleccionada
             if (fotoInput.files[0]) {
                 formData.append('foto', fotoInput.files[0]);
             }
 
-            // Adjuntar audio si fue grabado
             if (audioBlobFinal) {
                 formData.append('audio', audioBlobFinal, 'nota-de-voz.mp3');
             }
 
-            alert("Iniciando envío automático en segundo plano...");
+            alert("Conectando con el servidor API e iniciando el envío automatizado...");
 
             try {
-                // LLamado HTTP Post hacia la API local de Node.js
+                // Dirección apuntando a tu puerto local abierto por Node.js
                 const response = await fetch('http://localhost:3000/api/enviar-reporte', {
                     method: 'POST',
                     body: formData
@@ -150,13 +212,13 @@
 
                 const resultado = await response.json();
                 if (resultado.success) {
-                    alert("¡Éxito! El reporte, la foto y el audio se enviaron directamente a los chats de WhatsApp de manera transparente.");
+                    alert("¡Excelente! Reporte, foto y audio inyectados automáticamente en WhatsApp.");
                 } else {
-                    alert("Error en el servidor: " + resultado.error);
+                    alert("El servidor respondió con un error: " + resultado.error);
                 }
             } catch (error) {
                 console.error(error);
-                alert("No se pudo conectar con el servidor API local. Asegúrate de ejecutar 'node server.js' en la terminal.");
+                alert("No se detectó tu servidor de Node corriendo. Recuerda ejecutar 'node server.js' en la terminal de VS Code.");
             }
         }
     </script>
