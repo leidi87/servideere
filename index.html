@@ -19,12 +19,11 @@
 </head>
 <body>
     <ion-app>
-        <!-- CABECERA DE IONIC CORREGIDA -->
         <ion-header>
             <ion-toolbar color="primary">
-                <ion-title>INFOTEC-SERVIDEERE</ion-title>
+                <ion-title>INFOTEC-SERVIDEERE</title>
             </ion-toolbar>
-        </ion-header>
+        </header>
 
         <ion-content class="ion-padding">
             <div class="logo-box">
@@ -54,16 +53,18 @@
             </ion-list>
 
             <div class="ion-padding">
-                <!-- BOTÓN FOTO -->
+                <!-- BOTÓN FOTO (ACTUALIZADO PARA GALERÍA O CÁMARA) -->
                 <ion-button expand="block" color="secondary" onclick="document.getElementById('fotoInput').click()" style="color: black;">
-                    <ion-icon name="camera" slot="start"></ion-icon> CAPTURAR FOTO
+                    <ion-icon name="camera" slot="start"></ion-icon> ADJUNTAR O TOMAR FOTO
                 </ion-button>
-                <input type="file" id="fotoInput" accept="image/*" capture="camera" style="display: none;">
+                <!-- Se eliminó 'capture' para permitir la selección desde la galería -->
+                <input type="file" id="fotoInput" accept="image/*" style="display: none;" onchange="cargarPrevisualizacionFoto(this)">
 
-                <!-- BOTÓN AUDIO -->
-                <ion-button id="btnAudio" expand="block" color="warning" onclick="toggleGrabacionAudio()" style="color: black;">
-                    <ion-icon id="iconAudio" name="mic" slot="start"></ion-icon> <span id="textAudio">GRABAR AUDIO</span>
+                <!-- BOTÓN AUDIO (ACTUALIZADO PARA ADJUNTAR O GRABAR DIRECTO) -->
+                <ion-button id="btnAudio" expand="block" color="warning" onclick="solicitarOrigenAudio()" style="color: black;">
+                    <ion-icon id="iconAudio" name="mic" slot="start"></ion-icon> <span id="textAudio">OPCIONES DE AUDIO</span>
                 </ion-button>
+                <input type="file" id="audioInput" accept="audio/*" style="display: none;" onchange="cargarAudioAdjunto(this)">
 
                 <!-- REPRODUCTOR DE AUDIO -->
                 <div class="audio-preview-container">
@@ -79,11 +80,28 @@
     </ion-app>
 
     <script>
-        // --- LOGICA DE AUDIO ---
+        // --- LOGICA DE AUDIO (GRABAR O SELECCIONAR) ---
         let mediaRecorder;
         let audioChunks = [];
         let estadoGrabando = false;
 
+        // Pregunta al usuario qué desea hacer con el audio
+        function solicitarOrigenAudio() {
+            if (estadoGrabando) {
+                // Si ya está grabando, el botón actúa directamente para detenerla
+                toggleGrabacionAudio();
+                return;
+            }
+
+            const opcion = confirm("¿Deseas GRABAR un audio en vivo ahora mismo?\n\n(Presiona 'Cancelar' si prefieres ADJUNTAR un archivo de audio existente)");
+            if (opcion) {
+                toggleGrabacionAudio();
+            } else {
+                document.getElementById('audioInput').click();
+            }
+        }
+
+        // Graba audio en vivo usando el micrófono
         async function toggleGrabacionAudio() {
             const btn = document.getElementById('btnAudio');
             const texto = document.getElementById('textAudio');
@@ -123,8 +141,27 @@
                 estadoGrabando = false;
 
                 btn.setAttribute('color', 'warning');
-                texto.innerText = "GRABAR AUDIO";
+                texto.innerText = "OPCIONES DE AUDIO";
                 icono.setAttribute('name', 'mic');
+            }
+        }
+
+        // Procesa el archivo de audio seleccionado desde el almacenamiento
+        function cargarAudioAdjunto(input) {
+            const reproductor = document.getElementById('audioPlayback');
+            if (input.files && input.files[0]) {
+                const archivo = input.files[0];
+                const audioUrl = URL.createObjectURL(archivo);
+                reproductor.src = audioUrl;
+                reproductor.style.display = 'inline-block';
+                alert("Audio adjuntado correctamente: " + archivo.name);
+            }
+        }
+
+        // Alerta de confirmación para comprobar que la foto se cargó en memoria
+        function cargarPrevisualizacionFoto(input) {
+            if (input.files && input.files[0]) {
+                alert("Foto cargada con éxito (" + input.files[0].name + "). Lista para el registro.");
             }
         }
 
