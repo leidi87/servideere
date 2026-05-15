@@ -2,65 +2,29 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INFOTEC-SERVIDEERE</title>
     <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
     <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
     <style>
-        :root { 
-            --ion-color-primary: #367c2b; 
-            --ion-color-secondary: #ffde00; 
-        }
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-        .logo-box { 
-            text-align: center; 
-            padding: 15px; 
-            background: #f4f4f4; 
-            border-radius: 0 0 15px 15px;
-            margin-bottom: 10px;
-        }
-        .logo-box img { 
-            max-width: 140px; 
-            border-radius: 10px; 
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15); 
-        }
-        .app-title { 
-            font-weight: bold; 
-            text-align: center; 
-            color: #367c2b; 
-            margin-top: 8px;
-            font-size: 1.2rem;
-        }
-        ion-button { 
-            margin-top: 12px; 
-            font-weight: bold; 
-            --border-radius: 8px; 
-            height: 45px;
-        }
-        .audio-preview-container { 
-            margin: 15px 0; 
-            text-align: center; 
-            width: 100%;
-        }
-        audio { 
-            width: 100%; 
-            max-width: 100%; 
-            border-radius: 8px;
-        }
+        :root { --ion-color-primary: #367c2b; --ion-color-secondary: #ffde00; }
+        .logo-box { text-align: center; padding: 20px; background: #f4f4f4; }
+        .logo-box img { max-width: 180px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .app-title { font-weight: bold; text-align: center; color: #367c2b; margin-top: 10px; }
+        ion-button { margin-top: 12px; font-weight: bold; --border-radius: 8px; }
+        .audio-preview-container { margin-top: 15px; text-align: center; }
+        audio { width: 100%; max-width: 300px; }
     </style>
 </head>
 <body>
     <ion-app>
+        <!-- CABECERA DE IONIC CORREGIDA -->
         <ion-header>
             <ion-toolbar color="primary">
                 <ion-title>INFOTEC-SERVIDEERE</ion-title>
             </ion-toolbar>
-        </header>
+        </ion-header>
 
         <ion-content class="ion-padding">
             <div class="logo-box">
@@ -68,10 +32,10 @@
                 <h2 class="app-title">REGISTRO TÉCNICO</h2>
             </div>
 
-            <ion-list lines="inset">
+            <ion-list>
                 <ion-item>
                     <ion-label position="stacked">Nombre del Cliente</ion-label>
-                    <ion-input id="nombre" type="text" placeholder="Nombre completo"></ion-input>
+                    <ion-input id="nombre" placeholder="Nombre completo"></ion-input>
                 </ion-item>
                 
                 <ion-item>
@@ -81,16 +45,15 @@
 
                 <ion-item>
                     <ion-label position="stacked">Serie de la Máquina</ion-label>
-                    <ion-input id="serie" type="text" placeholder="Ej: JD-2026X"></ion-input>
+                    <ion-input id="serie" placeholder="Ej: JD-2026X"></ion-input>
                 </ion-item>
-                
                 <ion-item>
                     <ion-label position="stacked">Observaciones Diagnóstico</ion-label>
                     <ion-textarea id="obs" rows="3" placeholder="Detalles del servicio..."></ion-textarea>
                 </ion-item>
             </ion-list>
 
-            <div style="margin-top: 15px;">
+            <div class="ion-padding">
                 <!-- BOTÓN FOTO -->
                 <ion-button expand="block" color="secondary" onclick="document.getElementById('fotoInput').click()" style="color: black;">
                     <ion-icon name="camera" slot="start"></ion-icon> CAPTURAR FOTO
@@ -116,7 +79,7 @@
     </ion-app>
 
     <script>
-        // --- LÓGICA DE AUDIO ---
+        // --- LOGICA DE AUDIO ---
         let mediaRecorder;
         let audioChunks = [];
         let estadoGrabando = false;
@@ -141,7 +104,7 @@
                         const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
                         const audioUrl = URL.createObjectURL(audioBlob);
                         reproductor.src = audioUrl;
-                        reproductor.style.display = 'block';
+                        reproductor.style.display = 'inline-block';
                     };
 
                     mediaRecorder.start();
@@ -152,7 +115,7 @@
                     icono.setAttribute('name', 'square');
                 } catch (err) {
                     console.error("Error al acceder al micrófono: ", err);
-                    alert("No se pudo acceder al micrófono. Verifica los permisos.");
+                    alert("No se pudo acceder al micrófono. Verifica los permisos de tu navegador.");
                 }
             } else {
                 mediaRecorder.stop();
