@@ -36,12 +36,10 @@
                     <ion-label position="stacked">Nombre del Cliente</ion-label>
                     <ion-input id="nombre" placeholder="Nombre completo"></ion-input>
                 </ion-item>
-                
                 <ion-item>
                     <ion-label position="stacked">Celular del Cliente (WhatsApp)</ion-label>
                     <ion-input id="telCliente" type="tel" placeholder="Ej: 3151234567"></ion-input>
                 </ion-item>
-
                 <ion-item>
                     <ion-label position="stacked">Serie de la Máquina</ion-label>
                     <ion-input id="serie" placeholder="Ej: JD-2026X"></ion-input>
@@ -53,55 +51,32 @@
             </ion-list>
 
             <div class="ion-padding">
-                <!-- BOTÓN FOTO (ACTUALIZADO PARA GALERÍA O CÁMARA) -->
                 <ion-button expand="block" color="secondary" onclick="document.getElementById('fotoInput').click()" style="color: black;">
-                    <ion-icon name="camera" slot="start"></ion-icon> ADJUNTAR O TOMAR FOTO
+                    <ion-icon name="camera" slot="start"></ion-icon> SELECCIONAR / TOMAR FOTO
                 </ion-button>
-                <!-- Se eliminó 'capture' para permitir la selección desde la galería -->
-                <input type="file" id="fotoInput" accept="image/*" style="display: none;" onchange="cargarPrevisualizacionFoto(this)">
+                <input type="file" id="fotoInput" accept="image/*">
 
-                <!-- BOTÓN AUDIO (ACTUALIZADO PARA ADJUNTAR O GRABAR DIRECTO) -->
-                <ion-button id="btnAudio" expand="block" color="warning" onclick="solicitarOrigenAudio()" style="color: black;">
-                    <ion-icon id="iconAudio" name="mic" slot="start"></ion-icon> <span id="textAudio">OPCIONES DE AUDIO</span>
+                <ion-button id="btnAudio" expand="block" color="warning" onclick="toggleGrabacionAudio()" style="color: black;">
+                    <ion-icon id="iconAudio" name="mic" slot="start"></ion-icon> <span id="textAudio">GRABAR AUDIO EN VIVO</span>
                 </ion-button>
-                <input type="file" id="audioInput" accept="audio/*" style="display: none;" onchange="cargarAudioAdjunto(this)">
 
-                <!-- REPRODUCTOR DE AUDIO -->
                 <div class="audio-preview-container">
                     <audio id="audioPlayback" controls style="display: none;"></audio>
                 </div>
 
-                <!-- BOTÓN ENVÍO -->
-                <ion-button expand="block" color="success" onclick="enviarReporte()">
-                    <ion-icon name="paper-plane" slot="start"></ion-icon> ENVIAR REPORTE
+                <ion-button expand="block" color="success" onclick="enviarReporteAutomatico()">
+                    <ion-icon name="paper-plane" slot="start"></ion-icon> ENVIAR AUTOMÁTICAMENTE
                 </ion-button>
             </div>
         </ion-content>
     </ion-app>
 
     <script>
-        // --- LOGICA DE AUDIO (GRABAR O SELECCIONAR) ---
         let mediaRecorder;
         let audioChunks = [];
         let estadoGrabando = false;
+        let audioBlobFinal = null; // Guardará el binario del audio grabado
 
-        // Pregunta al usuario qué desea hacer con el audio
-        function solicitarOrigenAudio() {
-            if (estadoGrabando) {
-                // Si ya está grabando, el botón actúa directamente para detenerla
-                toggleGrabacionAudio();
-                return;
-            }
-
-            const opcion = confirm("¿Deseas GRABAR un audio en vivo ahora mismo?\n\n(Presiona 'Cancelar' si prefieres ADJUNTAR un archivo de audio existente)");
-            if (opcion) {
-                toggleGrabacionAudio();
-            } else {
-                document.getElementById('audioInput').click();
-            }
-        }
-
-        // Graba audio en vivo usando el micrófono
         async function toggleGrabacionAudio() {
             const btn = document.getElementById('btnAudio');
             const texto = document.getElementById('textAudio');
@@ -114,96 +89,74 @@
                     mediaRecorder = new MediaRecorder(stream);
                     audioChunks = [];
 
-                    mediaRecorder.ondataavailable = event => {
-                        audioChunks.push(event.data);
-                    };
-
+                    mediaRecorder.ondataavailable = event => { audioChunks.push(event.data); };
                     mediaRecorder.onstop = () => {
-                        const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
-                        const audioUrl = URL.createObjectURL(audioBlob);
-                        reproductor.src = audioUrl;
+                        audioBlobFinal = new Blob(audioChunks, { type: 'audio/mp3' });
+                        reproductor.src = URL.createObjectURL(audioBlobFinal);
                         reproductor.style.display = 'inline-block';
                     };
 
                     mediaRecorder.start();
                     estadoGrabando = true;
-
                     btn.setAttribute('color', 'danger');
                     texto.innerText = "DETENER GRABACIÓN";
                     icono.setAttribute('name', 'square');
                 } catch (err) {
-                    console.error("Error al acceder al micrófono: ", err);
-                    alert("No se pudo acceder al micrófono. Verifica los permisos de tu navegador.");
+                    alert("Verifica los permisos del micrófono.");
                 }
             } else {
                 mediaRecorder.stop();
                 mediaRecorder.stream.getTracks().forEach(track => track.stop());
                 estadoGrabando = false;
-
                 btn.setAttribute('color', 'warning');
-                texto.innerText = "OPCIONES DE AUDIO";
+                texto.innerText = "GRABAR AUDIO EN VIVO";
                 icono.setAttribute('name', 'mic');
             }
         }
 
-        // Procesa el archivo de audio seleccionado desde el almacenamiento
-        function cargarAudioAdjunto(input) {
-            const reproductor = document.getElementById('audioPlayback');
-            if (input.files && input.files[0]) {
-                const archivo = input.files[0];
-                const audioUrl = URL.createObjectURL(archivo);
-                reproductor.src = audioUrl;
-                reproductor.style.display = 'inline-block';
-                alert("Audio adjuntado correctamente: " + archivo.name);
-            }
-        }
+        // --- FUNCIÓN ASÍNCRONA DE ENVÍO DIRECTO AL BACKEND ---
+        async function enviarReporteAutomatico() {
+            const nombre = document.getElementById('nombre').value;
+            const serie = document.getElementById('serie').value;
+            const obs = document.getElementById('obs').value;
+            const telCliente = document.getElementById('telCliente').value;
+            const fotoInput = document.getElementById('fotoInput');
 
-        // Alerta de confirmación para comprobar que la foto se cargó en memoria
-        function cargarPrevisualizacionFoto(input) {
-            if (input.files && input.files[0]) {
-                alert("Foto cargada con éxito (" + input.files[0].name + "). Lista para el registro.");
-            }
-        }
+            // Creamos un contenedor de formulario Multipart (necesario para transportar archivos binarizados)
+            const formData = new FormData();
+            formData.append('cliente', nombre);
+            formData.append('serie', serie);
+            formData.append('observaciones', obs);
+            formData.append('telefonoCliente', telCliente);
 
-        // --- LÓGICA DE ENVÍO TRIPLE ---
-        function enviarReporte() {
-            const n = document.getElementById('nombre').value || "Pendiente";
-            const s = document.getElementById('serie').value || "Sin Serie";
-            const o = document.getElementById('obs').value || "Sin observaciones";
-            let telC = document.getElementById('telCliente').value.trim();
-            
-            const miNumero = "573176677848"; 
-            const miCorreo = "servideere@gmail.com";
-            
-            const mensajeWhatsApp = `*INFOTEC-SERVIDEERE*%0A*Cliente:* ${n}%0A*Serie:* ${s}%0A*Diagnóstico:* ${o}`;
-            const asuntoCorreo = `Reporte Técnico - Serie: ${s}`;
-            const cuerpoCorreo = `INFOTEC-SERVIDEERE%0D%0A----------------------%0D%0ACliente: ${n}%0D%0ASerie de la Máquina: ${s}%0D%0AObservaciones Diagnóstico:%0D%0A${o}`;
-            
-            window.open(`https://wa.me/${miNumero}?text=${mensajeWhatsApp}`, '_blank');
-            
-            if (telC !== "") {
-                if (!telC.startsWith('57') && telC.length === 10) {
-                    telC = '57' + telC;
+            // Adjuntar foto si fue seleccionada
+            if (fotoInput.files[0]) {
+                formData.append('foto', fotoInput.files[0]);
+            }
+
+            // Adjuntar audio si fue grabado
+            if (audioBlobFinal) {
+                formData.append('audio', audioBlobFinal, 'nota-de-voz.mp3');
+            }
+
+            alert("Iniciando envío automático en segundo plano...");
+
+            try {
+                // LLamado HTTP Post hacia la API local de Node.js
+                const response = await fetch('http://localhost:3000/api/enviar-reporte', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const resultado = await response.json();
+                if (resultado.success) {
+                    alert("¡Éxito! El reporte, la foto y el audio se enviaron directamente a los chats de WhatsApp de manera transparente.");
+                } else {
+                    alert("Error en el servidor: " + resultado.error);
                 }
-                
-                setTimeout(() => {
-                    const confirmarWhatsAppCliente = confirm(`¿Deseas enviar este mismo reporte al WhatsApp del cliente (${telC})?`);
-                    if (confirmarWhatsAppCliente) {
-                        window.open(`https://wa.me/${telC}?text=${mensajeWhatsApp}`, '_blank');
-                    }
-                    solicitarEnvioCorreo(miCorreo, asuntoCorreo, cuerpoCorreo);
-                }, 2500);
-            } else {
-                setTimeout(() => {
-                    solicitarEnvioCorreo(miCorreo, asuntoCorreo, cuerpoCorreo);
-                }, 2500);
-            }
-        }
-
-        function solicitarEnvioCorreo(correo, asunto, cuerpo) {
-            const confirmarCorreo = confirm(`¿Deseas respaldar este reporte enviándolo al correo ${correo}?`);
-            if (confirmarCorreo) {
-                window.open(`mailto:${correo}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`, '_self');
+            } catch (error) {
+                console.error(error);
+                alert("No se pudo conectar con el servidor API local. Asegúrate de ejecutar 'node server.js' en la terminal.");
             }
         }
     </script>
