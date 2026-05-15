@@ -23,7 +23,7 @@
             <ion-toolbar color="primary">
                 <ion-title>INFOTEC-SERVIDEERE</title>
             </ion-toolbar>
-        </ion-header>
+        </header>
 
         <ion-content class="ion-padding">
             <div class="logo-box">
@@ -37,6 +37,13 @@
                     <ion-label position="stacked">Nombre del Cliente</ion-label>
                     <ion-input id="nombre" placeholder="Nombre completo"></ion-input>
                 </ion-item>
+                
+                <!-- NUEVO CAMPO: CELULAR DEL CLIENTE -->
+                <ion-item>
+                    <ion-label position="stacked">Celular del Cliente (WhatsApp)</ion-label>
+                    <ion-input id="telCliente" type="tel" placeholder="Ej: 3151234567"></ion-input>
+                </ion-item>
+
                 <ion-item>
                     <ion-label position="stacked">Serie de la Máquina</ion-label>
                     <ion-input id="serie" placeholder="Ej: JD-2026X"></ion-input>
@@ -54,19 +61,19 @@
                 </ion-button>
                 <input type="file" id="fotoInput" accept="image/*" capture="camera" style="display: none;">
 
-                <!-- BOTÓN AUDIO MODIFICADO -->
+                <!-- BOTÓN AUDIO AUTOMÁTICO -->
                 <ion-button id="btnAudio" expand="block" color="warning" onclick="toggleGrabacionAudio()" style="color: black;">
                     <ion-icon id="iconAudio" name="mic" slot="start"></ion-icon> <span id="textAudio">GRABAR AUDIO</span>
                 </ion-button>
 
-                <!-- REPRODUCTOR DE AUDIO (Invisible hasta que se grabe algo) -->
+                <!-- REPRODUCTOR DE AUDIO -->
                 <div class="audio-preview-container">
                     <audio id="audioPlayback" controls style="display: none;"></audio>
                 </div>
 
-                <!-- BOTÓN ENVÍO -->
-                <ion-button expand="block" color="success" onclick="enviarWhatsApp()">
-                    <ion-icon name="logo-whatsapp" slot="start"></ion-icon> ENVIAR A WHATSAPP
+                <!-- BOTÓN ENVÍO MULTICANAL REVISADO -->
+                <ion-button expand="block" color="success" onclick="enviarReporte()">
+                    <ion-icon name="paper-plane" slot="start"></ion-icon> ENVIAR REPORTE
                 </ion-button>
             </div>
         </ion-content>
@@ -126,16 +133,55 @@
             }
         }
 
-        // --- ENVÍO DE DATOS ---
-        function enviarWhatsApp() {
+        // --- LÓGICA DE ENVÍO TRIPLE (SOPORTE ➔ CLIENTE ➔ CORREO) ---
+        function enviarReporte() {
             const n = document.getElementById('nombre').value || "Pendiente";
             const s = document.getElementById('serie').value || "Sin Serie";
             const o = document.getElementById('obs').value || "Sin observaciones";
+            let telC = document.getElementById('telCliente').value.trim();
             
-            const mensaje = `*INFOTEC-SERVIDEERE*%0A*Cliente:* ${n}%0A*Serie:* ${s}%0A*Diagnóstico:* ${o}`;
+            // Datos de destino reales
+            const miNumero = "573176677848"; 
+            const miCorreo = "servideere@gmail.com";
             
-            // Recuerda poner tu número real aquí (ejemplo: 57310...)
-            window.open(`https://wa.me/573100000000?text=${mensaje}`, '_blank');
+            // Texto formateado para WhatsApp
+            const mensajeWhatsApp = `*INFOTEC-SERVIDEERE*%0A*Cliente:* ${n}%0A*Serie:* ${s}%0A*Diagnóstico:* ${o}`;
+            
+            // Texto formateado para Correo Electrónico
+            const asuntoCorreo = `Reporte Técnico - Serie: ${s}`;
+            const cuerpoCorreo = `INFOTEC-SERVIDEERE%0D%0A----------------------%0D%0ACliente: ${n}%0D%0ASerie de la Máquina: ${s}%0D%0AObservaciones Diagnóstico:%0D%0A${o}`;
+            
+            // 1. PASO 1: Abrir chat de soporte técnico en WhatsApp con tu número real
+            window.open(`https://wa.me/${miNumero}?text=${mensajeWhatsApp}`, '_blank');
+            
+            // 2. PASO 2: Gestionar envío al WhatsApp del cliente si existe el número escrito
+            if (telC !== "") {
+                if (!telC.startsWith('57') && telC.length === 10) {
+                    telC = '57' + telC;
+                }
+                
+                setTimeout(() => {
+                    const confirmarWhatsAppCliente = confirm(`¿Deseas enviar este mismo reporte al WhatsApp del cliente (${telC})?`);
+                    if (confirmarWhatsAppCliente) {
+                        window.open(`https://wa.me/${telC}?text=${mensajeWhatsApp}`, '_blank');
+                    }
+                    // Pasar al correo después de decidir lo del cliente
+                    solicitarEnvioCorreo(miCorreo, asuntoCorreo, cuerpoCorreo);
+                }, 2500);
+            } else {
+                // Si no hay teléfono del cliente, pasar directo al correo
+                setTimeout(() => {
+                    solicitarEnvioCorreo(miCorreo, asuntoCorreo, cuerpoCorreo);
+                }, 2500);
+            }
+        }
+
+        // Función encargada de lanzar la aplicación de Correo
+        function solicitarEnvioCorreo(correo, asunto, cuerpo) {
+            const confirmarCorreo = confirm(`¿Deseas respaldar este reporte enviándolo al correo ${correo}?`);
+            if (confirmarCorreo) {
+                window.open(`mailto:${correo}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`, '_self');
+            }
         }
     </script>
 </body>
