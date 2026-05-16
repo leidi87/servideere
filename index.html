@@ -4,134 +4,281 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INFOTEC-SERVIDEERE</title>
-
-    <!-- 1. IMPORTACIÓN DE IONIC (Esencial para que no salga en blanco) -->
     <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
     <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
-
-    <!-- TUS ESTILOS PERSONALIZADOS -->
     <style>
-        :root { 
-            --ion-color-primary: #367c2b; 
-            --ion-color-secondary: #ffde00; 
-        }
-        /* Forzar que la app ocupe el 100% real de la pantalla */
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        
-        /* CONTENEDOR RESPONSIVO: Se adapta a pantallas grandes y chicas */
-        .container-ajustado {
-            width: 100%;
-            max-width: 750px; 
-            margin: 0 auto;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-
-        /* Si se abre en una pantalla muy grande (Tablet o Computadora) */
-        @media (min-width: 768px) {
-            .container-ajustado {
-                max-width: 850px;
-                padding: 20px;
-            }
-            /* Distribuye el formulario en dos columnas en pantallas grandes */
-            ion-list {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 12px;
-            }
-            /* Forzar que las observaciones ocupen todo el ancho de la rejilla */
-            ion-item:last-child {
-                grid-column: span 2;
-            }
-        }
-
-        .logo-box { 
-            text-align: center; 
-            padding: 15px; 
-            background: #ffffff; 
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            margin-bottom: 15px;
-        }
-        .logo-box img { 
-            max-width: 130px; 
-            height: auto;
-            border-radius: 12px; 
-        }
-        .app-title { 
-            font-weight: bold; 
-            text-align: center; 
-            color: #367c2b; 
-            margin-top: 8px;
-            font-size: 1.3rem;
-            letter-spacing: 0.5px;
-        }
-        ion-item {
-            --background: #ffffff;
-            --border-radius: 8px;
-            margin-bottom: 8px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.03);
-        }
-        ion-button { 
-            margin-top: 12px; 
-            font-weight: bold; 
-            --border-radius: 8px; 
-            height: 48px;
-            font-size: 1rem;
-        }
-        .audio-preview-container { 
-            margin: 12px 0; 
-            text-align: center; 
-            width: 100%;
-        }
-        audio { 
-            width: 100%; 
-            border-radius: 8px;
-        }
+        :root { --ion-color-primary: #367c2b; --ion-color-secondary: #ffde00; }
+        .logo-box { text-align: center; padding: 20px; background: #f4f4f4; }
+        .logo-box img { max-width: 180px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .app-title { font-weight: bold; text-align: center; color: #367c2b; margin-top: 10px; }
+        ion-button { margin-top: 12px; font-weight: bold; --border-radius: 8px; }
+        .audio-preview-container { margin-top: 15px; text-align: center; }
+        audio { width: 100%; max-width: 300px; }
     </style>
 </head>
 <body>
-
-    <!-- 2. ESTRUCTURA DE LA APP -->
     <ion-app>
+        <ion-header>
+            <ion-toolbar color="primary">
+                <ion-title>INFOTEC-SERVIDEERE</title>
+            </ion-toolbar>
+        </ion-header>
+
         <ion-content class="ion-padding">
-            <div class="container-ajustado">
-                
-                <!-- Caja del Logo y Título -->
-                <div class="logo-box">
-                    <!-- Recuerda verificar que la ruta de tu logo sea correcta -->
-                    <img src="img/logo.png" alt="Logo INFOTEC-SERVIDEERE">
-                    <div class="app-title">INFOTEC-SERVIDEERE</div>
+            <div class="logo-box">
+                <!-- Enlace al logo proporcionado -->
+                <img src="servi icon.jpg" alt="Logo INFOTEC-SERVIDEERE">
+                <h2 class="app-title">REGISTRO TÉCNICO</h2>
+            </div>
+
+            <ion-list>
+                <ion-item>
+                    <ion-label position="stacked">Nombre del Cliente</ion-label>
+                    <ion-input id="nombre" placeholder="Nombre completo"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="stacked">Serie de la Máquina</ion-label>
+                    <ion-input id="serie" placeholder="Ej: JD-2026X"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="stacked">Observaciones Diagnóstico</ion-label>
+                    <ion-textarea id="obs" rows="3" placeholder="Detalles del servicio..."></ion-textarea>
+                </ion-item>
+            </ion-list>
+
+            <div class="ion-padding">
+                <!-- BOTÓN FOTO -->
+                <ion-button expand="block" color="secondary" onclick="document.getElementById('fotoInput').click()" style="color: black;">
+                    <ion-icon name="camera" slot="start"></ion-icon> CAPTURAR FOTO
+                </ion-button>
+                <input type="file" id="fotoInput" accept="image/*" capture="camera" style="display: none;">
+
+                <!-- BOTÓN AUDIO MODIFICADO -->
+                <ion-button id="btnAudio" expand="block" color="warning" onclick="toggleGrabacionAudio()" style="color: black;">
+                    <ion-icon id="iconAudio" name="mic" slot="start"></ion-icon> <span id="textAudio">GRABAR AUDIO</span>
+                </ion-button>
+
+                <!-- REPRODUCTOR DE AUDIO (Invisible hasta que se grabe algo) -->
+                <div class="audio-preview-container">
+                    <audio id="audioPlayback" controls style="display: none;"></audio>
                 </div>
 
-                <!-- Formulario de Ejemplo (Aquí puedes meter tus inputs reales) -->
-                <ion-list>
-                    <ion-item>
-                        <ion-input label="Tractor / Maquinaria" placeholder="Ej. John Deere 5075E"></ion-input>
-                    </ion-item>
-                    
-                    <ion-item>
-                        <ion-input label="Horas de Servicio" type="number" placeholder="0000"></ion-input>
-                    </ion-item>
-
-                    <ion-item>
-                        <ion-textarea label="Observaciones Técnicas" placeholder="Escribe el reporte aquí..."></ion-textarea>
-                    </ion-item>
-                </ion-list>
-
-                <!-- Botón de acción -->
-                <ion-button expand="block" color="primary">Guardar Reporte</ion-button>
-
+                <!-- BOTÓN ENVÍO -->
+                <ion-button expand="block" color="success" onclick="enviarWhatsApp()">
+                    <ion-icon name="logo-whatsapp" slot="start"></ion-icon> ENVIAR A WHATSAPP
+                </ion-button>
             </div>
         </ion-content>
     </ion-app>
 
-    <!-- Aquí abajo puedes añadir tus scripts personalizados de JS o jQuery si los usas -->
+    <script>
+        // --- LOGICA DE AUDIO ---
+        let mediaRecorder;
+        let audioChunks = [];
+        let estadoGrabando = false;
+
+        async function toggleGrabacionAudio() {
+            const btn = document.getElementById('btnAudio');
+            const texto = document.getElementById('textAudio');
+            const icono = document.getElementById('iconAudio');
+            const reproductor = document.getElementById('audioPlayback');
+
+            if (!estadoGrabando) {
+                // Iniciar Grabación
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+
+                    mediaRecorder.ondataavailable = event => {
+                        audioChunks.push(event.data);
+                    };
+
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        reproductor.src = audioUrl;
+                        reproductor.style.display = 'inline-block'; // Muestra el reproductor
+                    };
+
+                    mediaRecorder.start();
+                    estadoGrabando = true;
+
+                    // Cambios estéticos de Ionic para denotar grabación activa
+                    btn.setAttribute('color', 'danger');
+                    texto.innerText = "DETENER GRABACIÓN";
+                    icono.setAttribute('name', 'square'); // Ícono de stop
+                } catch (err) {
+                    console.error("Error al acceder al micrófono: ", err);
+                    alert("No se pudo acceder al micrófono. Verifica los permisos de tu navegador.");
+                }
+            } else {
+                // Detener Grabación
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop()); // Apaga el micrófono de hardware
+                estadoGrabando = false;
+
+                // Devolver el botón a su estado original
+                btn.setAttribute('color', 'warning');
+                texto.innerText = "GRABAR AUDIO";
+                icono.setAttribute('name', 'mic');
+            }
+        }
+
+        // --- ENVÍO DE DATOS ---
+        function enviarWhatsApp() {
+            const n = document.getElementById('nombre').value || "Pendiente";
+            const s = document.getElementById('serie').value || "Sin Serie";
+            const o = document.getElementById('obs').value || "Sin observaciones";
+            
+            const mensaje = `*INFOTEC-SERVIDEERE*%0A*Cliente:* ${n}%0A*Serie:* ${s}%0A*Diagnóstico:* ${o}`;
+            
+            // Recuerda poner tu número real aquí (ejemplo: 57310...)
+            window.open(`https://wa.me/573176677848?text=${mensaje}`, '_blank');
+        }
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INFOTEC-SERVIDEERE</title>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
+    <style>
+        :root { --ion-color-primary: #367c2b; --ion-color-secondary: #ffde00; }
+        .logo-box { text-align: center; padding: 20px; background: #f4f4f4; }
+        .logo-box img { max-width: 180px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .app-title { font-weight: bold; text-align: center; color: #367c2b; margin-top: 10px; }
+        ion-button { margin-top: 12px; font-weight: bold; --border-radius: 8px; }
+        .audio-preview-container { margin-top: 15px; text-align: center; }
+        audio { width: 100%; max-width: 300px; }
+    </style>
+</head>
+<body>
+    <ion-app>
+        <ion-header>
+            <ion-toolbar color="primary">
+                <ion-title>INFOTEC-SERVIDEERE</title>
+            </ion-toolbar>
+        </ion-header>
+
+        <ion-content class="ion-padding">
+            <div class="logo-box">
+                <!-- Enlace al logo proporcionado -->
+                <img src="servi icon.jpg" alt="Logo INFOTEC-SERVIDEERE">
+                <h2 class="app-title">REGISTRO TÉCNICO</h2>
+            </div>
+
+            <ion-list>
+                <ion-item>
+                    <ion-label position="stacked">Nombre del Cliente</ion-label>
+                    <ion-input id="nombre" placeholder="Nombre completo"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="stacked">Serie de la Máquina</ion-label>
+                    <ion-input id="serie" placeholder="Ej: JD-2026X"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="stacked">Observaciones Diagnóstico</ion-label>
+                    <ion-textarea id="obs" rows="3" placeholder="Detalles del servicio..."></ion-textarea>
+                </ion-item>
+            </ion-list>
+
+            <div class="ion-padding">
+                <!-- BOTÓN FOTO -->
+                <ion-button expand="block" color="secondary" onclick="document.getElementById('fotoInput').click()" style="color: black;">
+                    <ion-icon name="camera" slot="start"></ion-icon> CAPTURAR FOTO
+                </ion-button>
+                <input type="file" id="fotoInput" accept="image/*" capture="camera" style="display: none;">
+
+                <!-- BOTÓN AUDIO MODIFICADO -->
+                <ion-button id="btnAudio" expand="block" color="warning" onclick="toggleGrabacionAudio()" style="color: black;">
+                    <ion-icon id="iconAudio" name="mic" slot="start"></ion-icon> <span id="textAudio">GRABAR AUDIO</span>
+                </ion-button>
+
+                <!-- REPRODUCTOR DE AUDIO (Invisible hasta que se grabe algo) -->
+                <div class="audio-preview-container">
+                    <audio id="audioPlayback" controls style="display: none;"></audio>
+                </div>
+
+                <!-- BOTÓN ENVÍO -->
+                <ion-button expand="block" color="success" onclick="enviarWhatsApp()">
+                    <ion-icon name="logo-whatsapp" slot="start"></ion-icon> ENVIAR A WHATSAPP
+                </ion-button>
+            </div>
+        </ion-content>
+    </ion-app>
+
+    <script>
+        // --- LOGICA DE AUDIO ---
+        let mediaRecorder;
+        let audioChunks = [];
+        let estadoGrabando = false;
+
+        async function toggleGrabacionAudio() {
+            const btn = document.getElementById('btnAudio');
+            const texto = document.getElementById('textAudio');
+            const icono = document.getElementById('iconAudio');
+            const reproductor = document.getElementById('audioPlayback');
+
+            if (!estadoGrabando) {
+                // Iniciar Grabación
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+
+                    mediaRecorder.ondataavailable = event => {
+                        audioChunks.push(event.data);
+                    };
+
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        reproductor.src = audioUrl;
+                        reproductor.style.display = 'inline-block'; // Muestra el reproductor
+                    };
+
+                    mediaRecorder.start();
+                    estadoGrabando = true;
+
+                    // Cambios estéticos de Ionic para denotar grabación activa
+                    btn.setAttribute('color', 'danger');
+                    texto.innerText = "DETENER GRABACIÓN";
+                    icono.setAttribute('name', 'square'); // Ícono de stop
+                } catch (err) {
+                    console.error("Error al acceder al micrófono: ", err);
+                    alert("No se pudo acceder al micrófono. Verifica los permisos de tu navegador.");
+                }
+            } else {
+                // Detener Grabación
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop()); // Apaga el micrófono de hardware
+                estadoGrabando = false;
+
+                // Devolver el botón a su estado original
+                btn.setAttribute('color', 'warning');
+                texto.innerText = "GRABAR AUDIO";
+                icono.setAttribute('name', 'mic');
+            }
+        }
+
+        // --- ENVÍO DE DATOS ---
+        function enviarWhatsApp() {
+            const n = document.getElementById('nombre').value || "Pendiente";
+            const s = document.getElementById('serie').value || "Sin Serie";
+            const o = document.getElementById('obs').value || "Sin observaciones";
+            
+            const mensaje = `*INFOTEC-SERVIDEERE*%0A*Cliente:* ${n}%0A*Serie:* ${s}%0A*Diagnóstico:* ${o}`;
+            
+            // Recuerda poner tu número real aquí (ejemplo: 57310...)
+            window.open(`https://wa.me/573176677848?text=${mensaje}`, '_blank');
+        }
+    </script>
 </body>
 </html>
