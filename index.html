@@ -1,4 +1,17 @@
-<style>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INFOTEC-SERVIDEERE</title>
+
+    <!-- 1. IMPORTACIÓN DE IONIC (Esencial para que no salga en blanco) -->
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
+
+    <!-- TUS ESTILOS PERSONALIZADOS -->
+    <style>
         :root { 
             --ion-color-primary: #367c2b; 
             --ion-color-secondary: #ffde00; 
@@ -14,7 +27,7 @@
         /* CONTENEDOR RESPONSIVO: Se adapta a pantallas grandes y chicas */
         .container-ajustado {
             width: 100%;
-            max-width: 750px; /* Incrementamos el ancho para que no se vea tan comprimido en PC */
+            max-width: 750px; 
             margin: 0 auto;
             padding: 10px;
             box-sizing: border-box;
@@ -82,3 +95,43 @@
             border-radius: 8px;
         }
     </style>
+</head>
+<body>
+
+    <!-- 2. ESTRUCTURA DE LA APP -->
+    <ion-app>
+        <ion-content class="ion-padding">
+            <div class="container-ajustado">
+                
+                <!-- Caja del Logo y Título -->
+                <div class="logo-box">
+                    <!-- Recuerda verificar que la ruta de tu logo sea correcta -->
+                    <img src="img/logo.png" alt="Logo INFOTEC-SERVIDEERE">
+                    <div class="app-title">INFOTEC-SERVIDEERE</div>
+                </div>
+
+                <!-- Formulario de Ejemplo (Aquí puedes meter tus inputs reales) -->
+                <ion-list>
+                    <ion-item>
+                        <ion-input label="Tractor / Maquinaria" placeholder="Ej. John Deere 5075E"></ion-input>
+                    </ion-item>
+                    
+                    <ion-item>
+                        <ion-input label="Horas de Servicio" type="number" placeholder="0000"></ion-input>
+                    </ion-item>
+
+                    <ion-item>
+                        <ion-textarea label="Observaciones Técnicas" placeholder="Escribe el reporte aquí..."></ion-textarea>
+                    </ion-item>
+                </ion-list>
+
+                <!-- Botón de acción -->
+                <ion-button expand="block" color="primary">Guardar Reporte</ion-button>
+
+            </div>
+        </ion-content>
+    </ion-app>
+
+    <!-- Aquí abajo puedes añadir tus scripts personalizados de JS o jQuery si los usas -->
+</body>
+</html>
