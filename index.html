@@ -3,31 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Servi Deere - Reporte de Servicio</title>
+    <title>INFOTEC - SERVIDEERE</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body>
 
     <main class="service-app">
         <header class="service-app__header">
-            <h1 class="service-app__title">Servi Deere</h1>
+            <div class="service-app__logo-container">
+                <img src="servi_icon.jpg" alt="Logo INFOTEC SERVIDEERE" class="service-app__logo">
+            </div>
+            <h1 class="service-app__title">INFOTEC - SERVIDEERE</h1>
             <p class="service-app__subtitle">Registro de Control Técnico</p>
         </header>
 
         <form id="form-servicio" class="service-form">
             
             <fieldset class="service-form__section">
-                <legend class="service-form__legend">Datos del Cliente y Servicio</legend>
+                <legend class="service-form__legend">Registro de Cliente y Servicio</legend>
                 
                 <div class="service-form__group">
                     <label class="service-form__label" for="nombre">Nombre del Cliente:</label>
-                    <input class="service-form__input" type="text" id="nombre" required placeholder="Ej. Juan Pérez">
+                    <input class="service-form__input" type="text" id="nombre" required placeholder="Nombre completo del cliente">
                 </div>
 
                 <div class="service-form__group">
-                    <label class="service-form__label" for="telefono">Teléfono:</label>
-                    <input class="service-form__input" type="tel" id="telefono" required placeholder="Ej. 3101234567">
+                    <label class="service-form__label" for="telefono">Número de Teléfono:</label>
+                    <input class="service-form__input" type="tel" id="telefono" required placeholder="Ej. 3171234567">
                 </div>
 
                 <div class="service-form__group">
@@ -40,27 +46,27 @@
                 <legend class="service-form__legend">Información de la Maquinaria</legend>
 
                 <div class="service-form__group">
-                    <label class="service-form__label" for="serie">Número de Serie:</label>
+                    <label class="service-form__label" for="serie">Número de Serie de la Máquina:</label>
                     <input class="service-form__input" type="text" id="serie" required placeholder="Ej. JDX12345678">
                 </div>
 
                 <div class="service-form__group">
                     <label class="service-form__label" for="observaciones">Observaciones Técnicas:</label>
-                    <textarea class="service-form__textarea" id="observaciones" rows="4" required placeholder="Describe el estado o reparación..."></textarea>
+                    <textarea class="service-form__textarea" id="observaciones" rows="4" required placeholder="Escribe aquí los detalles de la reparación o fallas encontradas..."></textarea>
                 </div>
             </fieldset>
 
             <fieldset class="service-form__section">
-                <legend class="service-form__legend">Evidencias (Multimedia)</legend>
+                <legend class="service-form__legend">Evidencias Multimedia</legend>
 
                 <div class="service-form__group">
-                    <label class="service-form__label" for="foto">Capturar/Adjuntar Foto:</label>
-                    <input class="service-form__input" type="file" id="foto" accept="image/*" capture="environment">
+                    <label class="service-form__label" for="foto">Capturar o Adjuntar Fotografías:</label>
+                    <input class="service-form__input" type="file" id="foto" accept="image/*" capture="environment" multiple>
                     <div id="preview-foto" class="service-form__preview"></div>
                 </div>
 
                 <div class="service-form__group">
-                    <label class="service-form__label">Notas de Voz:</label>
+                    <label class="service-form__label">Grabar Nota de Voz:</label>
                     <div class="audio-control">
                         <button type="button" id="btn-record" class="audio-control__button audio-control__button--record">Grabar Audio</button>
                         <button type="button" id="btn-stop" class="audio-control__button audio-control__button--stop" disabled>Detener</button>
@@ -70,8 +76,8 @@
             </fieldset>
 
             <div class="service-form__actions">
-                <button type="submit" name="destino" value="email" class="service-form__btn service-form__btn--email">Guardar y Enviar por Correo</button>
-                <button type="submit" name="destino" value="whatsapp" class="service-form__btn service-form__btn--whatsapp">Enviar Notificación por WhatsApp</button>
+                <button type="button" id="btn-whatsapp" class="service-form__btn service-form__btn--whatsapp">Enviar Notificación por WhatsApp</button>
+                <button type="submit" id="btn-email" class="service-form__btn service-form__btn--email">Guardar y Enviar al Correo</button>
             </div>
 
         </form>
