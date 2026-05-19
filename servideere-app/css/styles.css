@@ -1,0 +1,192 @@
+:root {
+    --brand-blue: #0d2c54;     /* Azul oscuro de tu logo */
+    --brand-gold: #df9217;     /* Ocre/Amarillo de tu logo */
+    --brand-bg: #fcf8f2;       /* Fondo crema suave de tu logo */
+    --brand-white: #ffffff;
+    --brand-dark: #111111;
+    --color-whatsapp: #25D366;  /* Verde oficial de WhatsApp */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--brand-bg);
+    color: var(--brand-dark);
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+}
+
+.infotec-app {
+    width: 100%;
+    max-width: 550px;
+    background: var(--brand-white);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(13, 44, 84, 0.15);
+    border-top: 10px solid var(--brand-blue);
+}
+
+/* Cabecera de la aplicación */
+.infotec-app__header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.infotec-app__logo {
+    max-width: 120px;
+    height: auto;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.infotec-app__title {
+    color: var(--brand-blue);
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.infotec-app__subtitle {
+    color: var(--brand-gold);
+    font-weight: 600;
+    font-size: 1rem;
+    margin-top: 3px;
+}
+
+/* Contenedores de secciones (Fieldset) */
+.infotec-form__section {
+    border: 2px solid #eaeaea;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.infotec-form__legend {
+    font-weight: bold;
+    padding: 0 10px;
+    color: var(--brand-blue);
+    font-size: 0.95rem;
+}
+
+.infotec-form__group {
+    margin-bottom: 15px;
+}
+
+.infotec-form__label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--brand-dark);
+}
+
+.infotec-form__input,
+.infotec-form__textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1.5px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    background-color: #fafafa;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.infotec-form__input:focus,
+.infotec-form__textarea:focus {
+    outline: none;
+    border-color: var(--brand-blue);
+    background-color: var(--brand-white);
+}
+
+/* Vistas previas de multimedia */
+.infotec-form__preview {
+    margin-top: 12px;
+    text-align: center;
+}
+
+.infotec-form__preview img {
+    max-width: 100%;
+    max-height: 180px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
+
+.infotec-form__preview audio {
+    width: 100%;
+    margin-top: 5px;
+}
+
+/* Botones para control de audio */
+.audio-ctrl {
+    display: flex;
+    gap: 10px;
+}
+
+.audio-ctrl__button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+.audio-ctrl__button--record {
+    background-color: #d9534f;
+    color: white;
+}
+
+.audio-ctrl__button--stop {
+    background-color: #f0ad4e;
+    color: white;
+}
+
+.audio-ctrl__button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* Botones principales de acción */
+.infotec-form__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.infotec-form__btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.1s, opacity 0.2s;
+}
+
+.infotec-form__btn:active {
+    transform: scale(0.98);
+}
+
+.infotec-form__btn--email {
+    background-color: var(--brand-blue);
+    color: var(--brand-white);
+}
+
+.infotec-form__btn--whatsapp {
+    background-color: var(--color-whatsapp);
+    color: var(--brand-white);
+}
+
+.infotec-form__btn:hover {
+    opacity: 0.95;
+}
