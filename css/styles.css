@@ -1,192 +1,86 @@
 :root {
-    --brand-blue: #0d2c54;     /* Azul oscuro de tu logo */
-    --brand-gold: #df9217;     /* Ocre/Amarillo de tu logo */
-    --brand-bg: #fcf8f2;       /* Fondo crema suave de tu logo */
-    --brand-white: #ffffff;
-    --brand-dark: #111111;
-    --color-whatsapp: #25D366;  /* Verde oficial de WhatsApp */
+    --color-verde: #367c2b;
+    --color-amarillo: #ffde00;
+    --color-oscuro: #212529;
+    --color-gris-fondo: #f4f6f7;
+    --color-blanco: #ffffff;
+    --color-whatsapp: #25d366;
+    --color-email: #007bff;
+    --fuente: 'Poppins', sans-serif;
+    --shadow: 0 4px 10px rgba(0,0,0,0.08);
+    --radius: 12px;
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    background-color: var(--brand-bg);
-    color: var(--brand-dark);
-    padding: 15px;
+    font-family: var(--fuente);
+    background-color: var(--color-gris-fondo);
+    color: var(--color-oscuro);
     display: flex;
+    justify-content: center;
+    padding: 15px;
+}
+
+.service-app {
+    width: 100%;
+    max-width: 480px;
+    background: var(--color-blanco);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.service-app__header {
+    background-color: var(--color-oscuro);
+    color: var(--color-blanco);
+    text-align: center;
+    padding: 25px 15px;
+    border-bottom: 5px solid var(--color-amarillo);
+}
+
+.service-app__logo-container {
+    width: 75px;
+    height: 75px;
+    margin: 0 auto 10px auto;
+    background: var(--color-blanco);
+    border-radius: 50%;
+    padding: 3px;
+    display: flex;
+    align-items: center;
     justify-content: center;
 }
 
-.infotec-app {
-    width: 100%;
-    max-width: 550px;
-    background: var(--brand-white);
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(13, 44, 84, 0.15);
-    border-top: 10px solid var(--brand-blue);
+.service-app__logo { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.service-app__title { font-size: 1.4rem; font-weight: 700; }
+.service-app__subtitle { font-size: 0.8rem; color: #a0aec0; text-transform: uppercase; }
+
+.service-form { padding: 15px; }
+.service-form__section { border: 1px solid #e2e8f0; border-radius: var(--radius); padding: 15px; margin-bottom: 15px; background: #fafafa; }
+.service-form__legend { font-weight: 600; font-size: 0.9rem; padding: 0 8px; color: var(--color-verde); }
+.service-form__group { margin-top: 12px; }
+.service-form__label { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px; }
+
+.service-form__input, .service-form__textarea {
+    width: 100%; padding: 10px; font-family: var(--fuente); font-size: 0.85rem;
+    border: 1px solid #cbd5e1; border-radius: 6px; background: var(--color-blanco);
 }
 
-/* Cabecera de la aplicación */
-.infotec-app__header {
-    text-align: center;
-    margin-bottom: 30px;
+.service-form__input:focus, .service-form__textarea:focus {
+    outline: none; border-color: var(--color-verde); box-shadow: 0 0 0 3px rgba(54, 124, 43, 0.1);
 }
 
-.infotec-app__logo {
-    max-width: 120px;
-    height: auto;
-    margin-bottom: 12px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
+.service-form__preview { margin-top: 10px; display: flex; gap: 5px; flex-wrap: wrap; }
+.service-form__preview img { width: 70px; height: 70px; object-fit: cover; border-radius: 4px; border: 1px solid #cbd5e1; }
 
-.infotec-app__title {
-    color: var(--brand-blue);
-    font-size: 1.8rem;
-    font-weight: 800;
-    letter-spacing: 0.5px;
-}
+.audio-control { display: flex; gap: 8px; }
+.audio-control__button { flex: 1; padding: 10px; font-family: var(--fuente); font-size: 0.8rem; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; color: white; }
+.audio-control__button--record { background: #e53e3e; }
+.audio-control__button--stop { background: var(--color-oscuro); }
+.audio-control__button:disabled { background: #cbd5e1; cursor: not-allowed; }
 
-.infotec-app__subtitle {
-    color: var(--brand-gold);
-    font-weight: 600;
-    font-size: 1rem;
-    margin-top: 3px;
-}
-
-/* Contenedores de secciones (Fieldset) */
-.infotec-form__section {
-    border: 2px solid #eaeaea;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 25px;
-}
-
-.infotec-form__legend {
-    font-weight: bold;
-    padding: 0 10px;
-    color: var(--brand-blue);
-    font-size: 0.95rem;
-}
-
-.infotec-form__group {
-    margin-bottom: 15px;
-}
-
-.infotec-form__label {
-    display: block;
-    margin-bottom: 6px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--brand-dark);
-}
-
-.infotec-form__input,
-.infotec-form__textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1.5px solid #ccc;
-    border-radius: 6px;
-    font-size: 1rem;
-    background-color: #fafafa;
-    transition: border-color 0.2s, background-color 0.2s;
-}
-
-.infotec-form__input:focus,
-.infotec-form__textarea:focus {
-    outline: none;
-    border-color: var(--brand-blue);
-    background-color: var(--brand-white);
-}
-
-/* Vistas previas de multimedia */
-.infotec-form__preview {
-    margin-top: 12px;
-    text-align: center;
-}
-
-.infotec-form__preview img {
-    max-width: 100%;
-    max-height: 180px;
-    border-radius: 6px;
-    border: 1px solid #ddd;
-}
-
-.infotec-form__preview audio {
-    width: 100%;
-    margin-top: 5px;
-}
-
-/* Botones para control de audio */
-.audio-ctrl {
-    display: flex;
-    gap: 10px;
-}
-
-.audio-ctrl__button {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 0.9rem;
-    transition: background-color 0.2s;
-}
-
-.audio-ctrl__button--record {
-    background-color: #d9534f;
-    color: white;
-}
-
-.audio-ctrl__button--stop {
-    background-color: #f0ad4e;
-    color: white;
-}
-
-.audio-ctrl__button:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-}
-
-/* Botones principales de acción */
-.infotec-form__actions {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.infotec-form__btn {
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 6px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: transform 0.1s, opacity 0.2s;
-}
-
-.infotec-form__btn:active {
-    transform: scale(0.98);
-}
-
-.infotec-form__btn--email {
-    background-color: var(--brand-blue);
-    color: var(--brand-white);
-}
-
-.infotec-form__btn--whatsapp {
-    background-color: var(--color-whatsapp);
-    color: var(--brand-white);
-}
-
-.infotec-form__btn:hover {
-    opacity: 0.95;
-}
+.service-form__actions { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
+.service-form__btn { width: 100%; padding: 12px; font-family: var(--fuente); font-size: 0.95rem; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; color: white; }
+.service-form__btn--whatsapp { background: var(--color-whatsapp); }
+.service-form__btn--email { background: var(--color-email); }
+.service-form__btn:active { transform: scale(0.99); }
