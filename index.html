@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Servi Deere - Reporte de Servicio</title>
     <link rel="stylesheet" href="css/styles.css">
-    <!-- Cargamos EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body>
-
 
     <main class="service-app">
         <header class="service-app__header">
@@ -17,10 +15,8 @@
             <p class="service-app__subtitle">Registro de Control Técnico</p>
         </header>
 
-
         <form id="form-servicio" class="service-form">
             
-            <!-- Datos del Cliente -->
             <fieldset class="service-form__section">
                 <legend class="service-form__legend">Datos del Cliente y Servicio</legend>
                 
@@ -29,12 +25,10 @@
                     <input class="service-form__input" type="text" id="nombre" required placeholder="Ej. Juan Pérez">
                 </div>
 
-
                 <div class="service-form__group">
                     <label class="service-form__label" for="telefono">Teléfono:</label>
                     <input class="service-form__input" type="tel" id="telefono" required placeholder="Ej. 3101234567">
                 </div>
-
 
                 <div class="service-form__group">
                     <label class="service-form__label" for="fecha">Fecha del Servicio:</label>
@@ -42,39 +36,29 @@
                 </div>
             </fieldset>
 
-
-            <!-- Datos de la Máquina -->
             <fieldset class="service-form__section">
                 <legend class="service-form__legend">Información de la Maquinaria</legend>
-
 
                 <div class="service-form__group">
                     <label class="service-form__label" for="serie">Número de Serie:</label>
                     <input class="service-form__input" type="text" id="serie" required placeholder="Ej. JDX12345678">
                 </div>
 
-
                 <div class="service-form__group">
                     <label class="service-form__label" for="observaciones">Observaciones Técnicas:</label>
-                    <textarea class="service-form__textarea" id="observaciones" rows="4" required placeholder="Describe el estado o reparación..."></textar
+                    <textarea class="service-form__textarea" id="observaciones" rows="4" required placeholder="Describe el estado o reparación..."></textarea>
                 </div>
             </fieldset>
 
-
-            <!-- Multimedia -->
             <fieldset class="service-form__section">
                 <legend class="service-form__legend">Evidencias (Multimedia)</legend>
 
-
-                <!-- Fotos -->
                 <div class="service-form__group">
                     <label class="service-form__label" for="foto">Capturar/Adjuntar Foto:</label>
                     <input class="service-form__input" type="file" id="foto" accept="image/*" capture="environment">
                     <div id="preview-foto" class="service-form__preview"></div>
                 </div>
 
-
-                <!-- Audio -->
                 <div class="service-form__group">
                     <label class="service-form__label">Notas de Voz:</label>
                     <div class="audio-control">
@@ -85,17 +69,13 @@
                 </div>
             </fieldset>
 
-
-            <!-- Acciones -->
             <div class="service-form__actions">
                 <button type="submit" name="destino" value="email" class="service-form__btn service-form__btn--email">Guardar y Enviar por Correo</button>
-                <button type="submit" name="destino" value="whatsapp" class="service-form__btn service-form__btn--whatsapp">Enviar Notificación por WhatsAp
+                <button type="submit" name="destino" value="whatsapp" class="service-form__btn service-form__btn--whatsapp">Enviar Notificación por WhatsApp</button>
             </div>
-
 
         </form>
     </main>
-
 
     <script src="js/app.js"></script>
 </body>
