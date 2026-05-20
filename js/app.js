@@ -4,6 +4,7 @@ emailjs.init("TU_USER_ID_DE_EMAILJS");
 let mediaRecorder;
 let audioChunks = [];
 let audioUrl = null;
+let imagenesBase64 = []; // Guardará las fotos convertidas a texto para enviarlas
 
 // Referencias a los elementos del DOM
 const btnRecord = document.getElementById('btn-record');
@@ -23,10 +24,8 @@ btnRecord.addEventListener('click', async () => {
 
     navigator.mediaDevices.getUserMedia({ audio: true })
         .then(stream => {
-            // Inicialización con formatos nativos estándar para evitar bloqueos en navegadores móviles
             audioChunks = [];
             
-            // Intentamos usar audio/webm (estándar en Android) o dejamos que el navegador elija su formato por defecto (esencial para iOS/Safari)
             try {
                 mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
             } catch (e) {
@@ -35,7 +34,6 @@ btnRecord.addEventListener('click', async () => {
 
             mediaRecorder.start();
 
-            // Cambios visuales de los estados de los botones
             btnRecord.disabled = true;
             btnStop.disabled = false;
             btnRecord.innerText = "🔴 Grabando Voz...";
@@ -47,11 +45,9 @@ btnRecord.addEventListener('click', async () => {
             });
 
             mediaRecorder.addEventListener('stop', () => {
-                // Creamos el Blob con el tipo exacto generado por la grabadora
                 const audioBlob = new Blob(audioChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
                 audioUrl = URL.createObjectURL(audioBlob);
                 
-                // Renderizamos el reproductor para escuchar el mensaje
                 previewAudio.innerHTML = `
                     <div style="margin-top: 10px; background: #e2e8f0; padding: 10px; border-radius: 6px;">
                         <span style="font-size: 0.75rem; font-weight: bold; display: block; margin-bottom: 4px; color: #212529;">▶ Nota de Voz Grabada:</span>
@@ -59,7 +55,6 @@ btnRecord.addEventListener('click', async () => {
                     </div>
                 `;
                 
-                // IMPORTANTE: Apagar físicamente el hardware del micrófono al detener la grabación
                 stream.getTracks().forEach(track => track.stop());
 
                 btnRecord.disabled = false;
@@ -81,25 +76,28 @@ btnStop.addEventListener('click', () => {
 
 
 /* ==========================================================================
-   2. PREVISUALIZACIÓN MULTIPLE DE FOTOGRAFÍAS
+   2. PREVISUALIZACIÓN MULTIPLE Y CONVERSIÓN DE FOTOGRAFÍAS
    ========================================================================== */
 inputFoto.addEventListener('change', (e) => {
-    previewFoto.innerHTML = ""; // Limpiamos previsualizaciones anteriores
+    previewFoto.innerHTML = ""; 
+    imagenesBase64 = []; // Reiniciamos el contenedor de imágenes
     
     if (e.target.files.length === 0) return;
 
-    // Recorremos cada uno de los archivos seleccionados/capturados
     Array.from(e.target.files).forEach(file => {
         const reader = new FileReader();
         
         reader.onload = function(event) {
+            // Guardamos la imagen convertida en texto plano (Base64) para EmailJS
+            imagenesBase64.push(event.target.result);
+
             const container = document.createElement('div');
             container.style.position = 'relative';
             container.style.display = 'inline-block';
+            container.style.marginRight = '5px';
 
             const img = document.createElement('img');
             img.src = event.target.result;
-            // Estilos rápidos para encajar en el grid visual
             img.style.width = "75px";
             img.style.height = "75px";
             img.style.objectFit = "cover";
@@ -116,57 +114,75 @@ inputFoto.addEventListener('change', (e) => {
 
 
 /* ==========================================================================
-   3. ENVÍO DIRECTO A WHATSAPP (Evita bloqueadores de ventanas emergentes)
+   3. ENVÍO DINÁMICO A WHATSAPP (Corregido para el Cliente y Alerta de Foto)
    ========================================================================== */
 document.getElementById('btn-whatsapp').addEventListener('click', () => {
     const nombre = document.getElementById('nombre').value;
-    const telefono = document.getElementById('telefono').value;
+    const telefonoRaw = document.getElementById('telefono').value;
     const fecha = document.getElementById('fecha').value;
     const serie = document.getElementById('serie').value;
     const observaciones = document.getElementById('observaciones').value;
+    const tieneFotos = inputFoto.files.length > 0;
 
-    if (!nombre || !telefono || !serie) {
-        alert("Por favor rellena los datos de Nombre, Teléfono y Serie de la máquina antes de proceder.");
+    if (!nombre || !telefonoRaw || !serie) {
+        alert("Por favor rellena los datos de Nombre, Teléfono y Serie de la máquina antes de enviar el WhatsApp.");
         return;
     }
 
-    // Estructuración del mensaje de texto adaptado para el taller
+    // Limpiamos el teléfono quitando espacios, guiones o símbolos
+    const telefonoCliente = telefonoRaw.replace(/\D/g, '');
+
+    // Estructuración del mensaje de texto adaptado para el cliente
     let textoMensaje = `*INFOTEC - SERVIDEERE*\n`;
     textoMensaje += `*Reporte Técnico de Servicio*\n\n`;
     textoMensaje += `• *Cliente:* ${nombre}\n`;
-    textoMensaje += `• *Teléfono:* ${telefono}\n`;
     textoMensaje += `• *Fecha:* ${fecha}\n`;
     textoMensaje += `• *Serie Máquina:* ${serie}\n\n`;
     textoMensaje += `*Observaciones:*\n${observaciones}\n\n`;
-    textoMensaje += `_Nota: Las evidencias de fotos y notas de voz se encuentran adjuntas localmente en el dispositivo._`;
+    
+    if (tieneFotos) {
+        textoMensaje += `📸 _Las fotos y el audio han sido cargados en la App. Recuerda adjuntar manualmente la foto del carrete en este chat para que el cliente la reciba instantáneamente._`;
+    } else {
+        textoMensaje += `_Nota: Reporte enviado sin evidencias adjuntas._`;
+    }
 
-    // Codificación segura para saltos de línea, tildes y espacios
     const mensajeCodificado = encodeURIComponent(textoMensaje);
 
-    // Canal de destino oficial (Administración)
-    const numAdmin = "573176677848"; 
+    // Agregamos código de país 57 (Colombia). Si ya lo tiene escrito el usuario, evitamos duplicarlo.
+    const numeroDestino = telefonoCliente.startsWith('57') ? telefonoCliente : `57${telefonoCliente}`;
     
-    alert("Abriendo WhatsApp. Recuerda enviar el reporte al administrador y posteriormente podrás reenviar la misma plantilla al cliente desde tu chat.");
+    alert(`Redirigiendo al WhatsApp del cliente: ${nombre} (${numeroDestino})`);
     
-    // Redirección directa sobre la pestaña nativa para evitar bloqueos del sistema móvil
-    window.location.href = `https://api.whatsapp.com/send?phone=${numAdmin}&text=${mensajeCodificado}`;
+    // Abrimos en una pestaña nueva para que el técnico no pierda los datos de la app
+    const urlWhatsapp = `https://wa.me{numeroDestino}?text=${mensajeCodificado}`;
+    window.open(urlWhatsapp, '_blank');
 });
 
 
 /* ==========================================================================
-   4. ENVÍO DEL FORMULARIO COMPLETO POR EMAILJS (Copia de seguridad)
+   4. ENVÍO DEL FORMULARIO COMPLETO POR EMAILJS (Incluye las fotos guardadas)
    ========================================================================== */
 document.getElementById('form-servicio').addEventListener('submit', function(event) {
     event.preventDefault();
     
     const serviceID = 'default_service';
-    const templateID = 'TU_TEMPLATE_ID'; // Reemplazar con el ID de tu plantilla en el Dashboard de EmailJS
+    const templateID = 'TU_TEMPLATE_ID'; 
 
-    alert("Enviando copia de respaldo al correo servideere@gmail.com...");
+    alert("Enviando reporte detallado con fotos adjuntas al correo...");
+
+    // Enviamos los datos estructurados incluyendo el array de fotos en Base64
+    const parametrosCorreo = {
+        nombre: document.getElementById('nombre').value,
+        telefono: document.getElementById('telefono').value,
+        fecha: document.getElementById('fecha').value,
+        serie: document.getElementById('serie').value,
+        observaciones: document.getElementById('observaciones').value,
+        imagenes: imagenesBase64.join(' | ') // Pasa todas las fotos convertidas a texto
+    };
     
-    emailjs.sendForm(serviceID, templateID, this)
+    emailjs.send(serviceID, templateID, parametrosCorreo)
         .then(() => {
-            alert('¡Copia de respaldo enviada al correo exitosamente!');
+            alert('¡Reporte completo enviado al correo exitosamente con todas sus evidencias!');
         }, (err) => {
             alert('Error al procesar el envío de correo: ' + JSON.stringify(err));
         });
