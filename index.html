@@ -83,6 +83,45 @@
         </form>
     </main>
 
+    <!-- Tu archivo original de JavaScript -->
     <script src="js/app.js"></script>
+
+    <!-- Código agregado para solucionar el envío dinámico a WhatsApp -->
+    <script>
+        document.getElementById('btn-whatsapp').addEventListener('click', function() {
+            // 1. Capturamos los datos que el técnico escribió en el formulario
+            const nombre = document.getElementById('nombre').value;
+            const telefono = document.getElementById('telefono').value.trim();
+            const fecha = document.getElementById('fecha').value;
+            const serie = document.getElementById('serie').value;
+            const observaciones = document.getElementById('observaciones').value;
+
+            // 2. Validamos que el teléfono no esté vacío
+            if (!telefono) {
+                alert('Por favor, ingrese el número de teléfono del cliente para enviar el WhatsApp.');
+                document.getElementById('telefono').focus();
+                return;
+            }
+
+            // 3. Limpiamos el número de espacios o guiones si los hay
+            const telefonoLimpio = telefono.replace(/\s+/g, '').replace(/-/g, '');
+
+            // 4. Redactamos el texto que llegará a WhatsApp (Aviso sobre las fotos)
+            const mensaje = `*INFOTEC - SERVIDEERE*\n` +
+                            `*Registro de Control Técnico*\n\n` +
+                            `• *Cliente:* ${nombre}\n` +
+                            `• *Fecha:* ${fecha}\n` +
+                            `• *Serie Máquina:* ${serie}\n` +
+                            `• *Observaciones:* ${observaciones}\n\n` +
+                            `_Nota: Las evidencias fotográficas y notas de voz han sido respaldadas en el reporte técnico enviado por correo electrónico._`;
+
+            // 5. Creamos la URL dinámica con el teléfono del cliente (Código 57 para Colombia)
+            const urlWhatsapp = `https://wa.me{telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
+
+            // 6. Abrimos la ventana de WhatsApp dirigida al cliente
+            window.open(urlWhatsapp, '_blank');
+        });
+    </script>
 </body>
 </html>
+
