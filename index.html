@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INFOTEC - SERVIDEERE</title>
+    <!-- Vinculación del Manifiesto para poder instalar la app en zonas sin señal -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1e293b">
+
     <link rel="stylesheet" href="css/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -83,45 +87,54 @@
         </form>
     </main>
 
-    <!-- Tu archivo original de JavaScript -->
+    <!-- Tu archivo principal de JavaScript -->
     <script src="js/app.js"></script>
 
-    <!-- Código agregado para solucionar el envío dinámico a WhatsApp -->
+    <!-- Código para solucionar el envío dinámico a WhatsApp -->
     <script>
         document.getElementById('btn-whatsapp').addEventListener('click', function() {
-            // 1. Capturamos los datos que el técnico escribió en el formulario
             const nombre = document.getElementById('nombre').value;
             const telefono = document.getElementById('telefono').value.trim();
             const fecha = document.getElementById('fecha').value;
             const serie = document.getElementById('serie').value;
             const observaciones = document.getElementById('observaciones').value;
 
-            // 2. Validamos que el teléfono no esté vacío
-            if (!telefono) {
-                alert('Por favor, ingrese el número de teléfono del cliente para enviar el WhatsApp.');
+            if (!telefono || !nombre) {
+                alert('Por favor, ingrese el nombre y el número de teléfono del cliente.');
                 document.getElementById('telefono').focus();
                 return;
             }
 
-            // 3. Limpiamos el número de espacios o guiones si los hay
-            const telefonoLimpio = telefono.replace(/\s+/g, '').replace(/-/g, '');
+            // Dejamos solo los dígitos numéricos
+            const telefonoLimpio = telefono.replace(/\D/g, '');
+            
+            // Si el técnico no escribió el 57 de Colombia, se lo agregamos automáticamente
+            const numeroDestino = telefonoLimpio.startsWith('57') ? telefonoLimpio : `57${telefonoLimpio}`;
 
-            // 4. Redactamos el texto que llegará a WhatsApp (Aviso sobre las fotos)
             const mensaje = `*INFOTEC - SERVIDEERE*\n` +
                             `*Registro de Control Técnico*\n\n` +
                             `• *Cliente:* ${nombre}\n` +
                             `• *Fecha:* ${fecha}\n` +
                             `• *Serie Máquina:* ${serie}\n` +
                             `• *Observaciones:* ${observaciones}\n\n` +
-                            `_Nota: Las evidencias fotográficas y notas de voz han sido respaldadas en el reporte técnico enviado por correo electrónico._`;
+                            `📸 _Nota: Las evidencias fotográficas y notas de voz han sido respaldadas en el reporte técnico por correo. Recuerda adjuntar manualmente la foto del carrete en este chat para enviarla de inmediato._`;
 
-            // 5. Creamos la URL dinámica con el teléfono del cliente (Código 57 para Colombia)
-            const urlWhatsapp = `https://wa.me{telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
+            // CORREGIDO: Añadida la barra diagonal "/" y la estructura wa.me correcta
+            const urlWhatsapp = `https://wa.me{numeroDestino}?text=${encodeURIComponent(mensaje)}`;
 
-            // 6. Abrimos la ventana de WhatsApp dirigida al cliente
             window.open(urlWhatsapp, '_blank');
         });
     </script>
+
+    <!-- Registro de Service Worker para habilitar el uso offline -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Service Worker cargado correctamente para trabajar sin señal.', reg))
+                    .catch(err => console.error('Error al registrar Service Worker:', err));
+            });
+        }
+    </script>
 </body>
 </html>
-
