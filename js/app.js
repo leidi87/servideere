@@ -1,4 +1,4 @@
-// Inicialización de EmailJS (Asegúrate de colocar tu llave pública real si utilizas el servicio de correo)
+// Inicialización de EmailJS (Asegúrate de colocar tu llave pública real)
 emailjs.init("TU_USER_ID_DE_EMAILJS");
 
 let mediaRecorder;
@@ -64,7 +64,7 @@ btnRecord.addEventListener('click', async () => {
 
         }).catch(err => {
             console.error("Error capturando el micrófono:", err);
-            alert("No se pudo activar el micrófono. Por favor, haz clic en el icono del candado (🔒) en la barra de direcciones y dale PERMITIR al Micrófono.");
+            alert("No se pudo activar el micrófono. Por favor, dale PERMITIR al Micrófono.");
         });
 });
 
@@ -80,7 +80,7 @@ btnStop.addEventListener('click', () => {
    ========================================================================== */
 inputFoto.addEventListener('change', (e) => {
     previewFoto.innerHTML = ""; 
-    imagenesBase64 = []; // Reiniciamos el contenedor de imágenes
+    imagenesBase64 = []; 
     
     if (e.target.files.length === 0) return;
 
@@ -88,7 +88,6 @@ inputFoto.addEventListener('change', (e) => {
         const reader = new FileReader();
         
         reader.onload = function(event) {
-            // Guardamos la imagen convertida en texto plano (Base64) para EmailJS
             imagenesBase64.push(event.target.result);
 
             const container = document.createElement('div');
@@ -114,76 +113,105 @@ inputFoto.addEventListener('change', (e) => {
 
 
 /* ==========================================================================
-   3. ENVÍO DINÁMICO A WHATSAPP (Corregido para el Cliente y Alerta de Foto)
-   ========================================================================== */
-document.getElementById('btn-whatsapp').addEventListener('click', () => {
-    const nombre = document.getElementById('nombre').value;
-    const telefonoRaw = document.getElementById('telefono').value;
-    const fecha = document.getElementById('fecha').value;
-    const serie = document.getElementById('serie').value;
-    const observaciones = document.getElementById('observaciones').value;
-    const tieneFotos = inputFoto.files.length > 0;
-
-    if (!nombre || !telefonoRaw || !serie) {
-        alert("Por favor rellena los datos de Nombre, Teléfono y Serie de la máquina antes de enviar el WhatsApp.");
-        return;
-    }
-
-    // Limpiamos el teléfono quitando espacios, guiones o símbolos
-    const telefonoCliente = telefonoRaw.replace(/\D/g, '');
-
-    // Estructuración del mensaje de texto adaptado para el cliente
-    let textoMensaje = `*INFOTEC - SERVIDEERE*\n`;
-    textoMensaje += `*Reporte Técnico de Servicio*\n\n`;
-    textoMensaje += `• *Cliente:* ${nombre}\n`;
-    textoMensaje += `• *Fecha:* ${fecha}\n`;
-    textoMensaje += `• *Serie Máquina:* ${serie}\n\n`;
-    textoMensaje += `*Observaciones:*\n${observaciones}\n\n`;
-    
-    if (tieneFotos) {
-        textoMensaje += `📸 _Las fotos y el audio han sido cargados en la App. Recuerda adjuntar manualmente la foto del carrete en este chat para que el cliente la reciba instantáneamente._`;
-    } else {
-        textoMensaje += `_Nota: Reporte enviado sin evidencias adjuntas._`;
-    }
-
-    const mensajeCodificado = encodeURIComponent(textoMensaje);
-
-    // Agregamos código de país 57 (Colombia). Si ya lo tiene escrito el usuario, evitamos duplicarlo.
-    const numeroDestino = telefonoCliente.startsWith('57') ? telefonoCliente : `57${telefonoCliente}`;
-    
-    alert(`Redirigiendo al WhatsApp del cliente: ${nombre} (${numeroDestino})`);
-    
-    // Abrimos en una pestaña nueva para que el técnico no pierda los datos de la app
-    const urlWhatsapp = `https://wa.me{numeroDestino}?text=${mensajeCodificado}`;
-    window.open(urlWhatsapp, '_blank');
-});
-
-
-/* ==========================================================================
-   4. ENVÍO DEL FORMULARIO COMPLETO POR EMAILJS (Incluye las fotos guardadas)
+   3. ENVÍO DEL FORMULARIO CON FUNCIÓN OFFLINE (Soporte sin cobertura)
    ========================================================================== */
 document.getElementById('form-servicio').addEventListener('submit', function(event) {
     event.preventDefault();
     
-    const serviceID = 'default_service';
-    const templateID = 'TU_TEMPLATE_ID'; 
-
-    alert("Enviando reporte detallado con fotos adjuntas al correo...");
-
-    // Enviamos los datos estructurados incluyendo el array de fotos en Base64
+    // Estructuramos los datos recolectados en el formulario
     const parametrosCorreo = {
         nombre: document.getElementById('nombre').value,
         telefono: document.getElementById('telefono').value,
         fecha: document.getElementById('fecha').value,
         serie: document.getElementById('serie').value,
         observaciones: document.getElementById('observaciones').value,
-        imagenes: imagenesBase64.join(' | ') // Pasa todas las fotos convertidas a texto
+        imagenes: imagenesBase64.join(' | ') // Une las fotos codificadas en una cadena de texto
     };
-    
-    emailjs.send(serviceID, templateID, parametrosCorreo)
+
+    // Verificamos si el dispositivo cuenta con acceso a internet en el momento
+    if (navigator.onLine) {
+        enviarReporteEmailJS(parametrosCorreo, this);
+    } else {
+        // Si no hay cobertura, lo guardamos localmente en el celular
+        guardarReporteOffline(parametrosCorreo);
+        this.reset(); // Limpiamos el formulario para el siguiente trabajo
+        previewFoto.innerHTML = "";
+        previewAudio.innerHTML = "";
+        imagenesBase64 = [];
+    }
+});
+
+// Función interna para el envío directo a EmailJS
+function enviarReporteEmailJS(datos, formularioElemento) {
+    const serviceID = 'default_service';
+    const templateID = 'TU_TEMPLATE_ID'; // Recuerda reemplazar por tu ID real de plantilla
+
+    alert("Conexión detectada. Enviando reporte detallado al correo...");
+
+    emailjs.send(serviceID, templateID, datos)
         .then(() => {
-            alert('¡Reporte completo enviado al correo exitosamente con todas sus evidencias!');
+            alert('¡Reporte completo enviado al correo exitosamente!');
+            if(formularioElemento) {
+                formularioElemento.reset();
+                previewFoto.innerHTML = "";
+                previewAudio.innerHTML = "";
+                imagenesBase64 = [];
+            }
         }, (err) => {
-            alert('Error al procesar el envío de correo: ' + JSON.stringify(err));
+            alert('Error al enviar correo: ' + JSON.stringify(err));
         });
+}
+
+// Función interna para archivar datos dentro del teléfono sin internet
+function guardarReporteOffline(datos) {
+    // Obtenemos el listado de reportes ya existentes o creamos un arreglo vacío si es el primero
+    let reportesGuardados = JSON.parse(localStorage.getItem('reportes_offline')) || [];
+    
+    // Añadimos el nuevo reporte al listado local
+    reportesGuardados.push(datos);
+    
+    // Sobrescribimos el almacenamiento local del celular con la nueva lista
+    localStorage.setItem('reportes_offline', JSON.stringify(reportesGuardados));
+    
+    alert("⚠️ SIN COBERTURA: El reporte técnico ha sido guardado de forma segura en la memoria de la aplicación. Se enviará automáticamente por correo cuando el teléfono recupere la señal de Internet.");
+}
+
+
+/* ==========================================================================
+   4. DETECTOR Y SINCRONIZADOR AUTOMÁTICO DE DATOS PENDIENTES
+   ========================================================================== */
+function sincronizarReportesPendientes() {
+    let reportesGuardados = JSON.parse(localStorage.getItem('reportes_offline')) || [];
+    
+    if (reportesGuardados.length === 0) return; // Si no hay nada archivado, no hace nada
+
+    alert(`🔄 ¡Señal recuperada! Sincronizando ${reportesGuardados.length} reporte(s) pendiente(s) con el correo...`);
+
+    const serviceID = 'default_service';
+    const templateID = 'TU_TEMPLATE_ID'; // Recuerda reemplazar por tu ID real de plantilla
+
+    // Recorremos y enviamos individualmente cada reporte archivado
+    reportesGuardados.forEach((reporte, index) => {
+        emailjs.send(serviceID, templateID, reporte)
+            .then(() => {
+                console.log(`Reporte técnico offline #${index + 1} enviado exitosamente.`);
+                
+                // Removemos el reporte enviado exitosamente de la cola de pendientes
+                reportesGuardados.splice(index, 1);
+                localStorage.setItem('reportes_offline', JSON.stringify(reportesGuardados));
+            })
+            .catch((err) => {
+                console.error("Error reenviando reporte en segundo plano:", err);
+            });
+    });
+}
+
+// Escuchamos el evento nativo del celular cuando detecte que volvió el internet
+window.addEventListener('online', sincronizarReportesPendientes);
+
+// También revisamos si hay reportes guardados cada vez que el técnico abre la aplicación
+window.addEventListener('load', () => {
+    if (navigator.onLine) {
+        sincronizarReportesPendientes();
+    }
 });
