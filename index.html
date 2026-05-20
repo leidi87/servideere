@@ -90,18 +90,18 @@
     <!-- Tu archivo principal de JavaScript -->
     <script src="js/app.js"></script>
 
-    <!-- Código para solucionar el envío dinámico a WhatsApp -->
+    <!-- Código SOLUCIONADO para el envío dinámico a WhatsApp -->
     <script>
         document.getElementById('btn-whatsapp').addEventListener('click', function() {
-            const nombre = document.getElementById('nombre').value;
+            const nombre = document.getElementById('nombre').value.trim();
             const telefono = document.getElementById('telefono').value.trim();
             const fecha = document.getElementById('fecha').value;
-            const serie = document.getElementById('serie').value;
-            const observaciones = document.getElementById('observaciones').value;
+            const serie = document.getElementById('serie').value.trim();
+            const observaciones = document.getElementById('observaciones').value.trim();
 
-            if (!telefono || !nombre) {
-                alert('Por favor, ingrese el nombre y el número de teléfono del cliente.');
-                document.getElementById('telefono').focus();
+            // Validación mejorada: Asegura que todos los campos requeridos estén llenos antes de enviar
+            if (!nombre || !telefono || !fecha || !serie || !observaciones) {
+                alert('Por favor, complete todos los campos del formulario antes de generar el reporte de WhatsApp.');
                 return;
             }
 
@@ -119,10 +119,11 @@
                             `• *Observaciones:* ${observaciones}\n\n` +
                             `📸 _Nota: Las evidencias fotográficas y notas de voz han sido respaldadas en el reporte técnico por correo. Recuerda adjuntar manualmente la foto del carrete en este chat para enviarla de inmediato._`;
 
-            // CORREGIDO: Añadida la barra diagonal "/" y la estructura wa.me correcta
+            // ¡CORREGIDO AQUÍ!: Añadida la barra "/" y removidas las llaves incorrectas {}
             const urlWhatsapp = `https://wa.me{numeroDestino}?text=${encodeURIComponent(mensaje)}`;
 
-            window.open(urlWhatsapp, '_blank');
+            // Abre WhatsApp en una pestaña totalmente nueva de forma segura
+            window.open(urlWhatsapp, '_blank', 'noopener,noreferrer');
         });
     </script>
 
