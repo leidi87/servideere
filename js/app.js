@@ -1,150 +1,172 @@
-// Inicializar EmailJS correctamente
-(function () {
-    emailjs.init("26egLDQpcS@b@W5");
-})();
+/**
+ * INFOTEC - SERVIDEERE
+ * Archivo principal de lógica (app.js)
+ * Totalmente adaptado para GitHub Pages y uso offline básico.
+ */
 
-// ENVÍO DEL FORMULARIO AL CORREO
-document.getElementById("form-servicio").addEventListener("submit", function (e) {
+// === CONFIGURACIÓN DE CREDENCIALES EMAILJS ===
+const EMAILJS_SERVICE_ID = 'service_gmail'; // Cambia por tu Service ID si no usas el por defecto
+const EMAILJS_TEMPLATE_ID = 'template_suegftj'; // Tomado de tu captura de pantalla
 
-    e.preventDefault();
-
-    // Captura de datos
-    const nombre = document.getElementById("nombre").value.trim();
-    const telefono = document.getElementById("telefono").value.trim();
-    const fecha = document.getElementById("fecha").value;
-    const serie = document.getElementById("serie").value.trim();
-    const observaciones = document.getElementById("observaciones").value.trim();
-
-    // Validación
-    if (!nombre || !telefono || !fecha || !serie || !observaciones) {
-        alert("Por favor completa todos los campos.");
-        return;
-    }
-
-    // Parámetros para EmailJS
-    const templateParams = {
-        nombre: nombre,
-        telefono: telefono,
-        fecha: fecha,
-        serie: serie,
-        observaciones: observaciones
-    };
-
-    // Cambia estos datos por los tuyos reales de EmailJS
-    const SERVICE_ID = "service_xxxxxxx";
-    const TEMPLATE_ID = "template_xxxxxxx";
-
-    // Envío
-    emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
-        .then(function (response) {
-
-            console.log("Correo enviado:", response);
-
-            alert("Reporte enviado correctamente al correo.");
-
-            // Limpiar formulario
-            document.getElementById("form-servicio").reset();
-
-            // Limpiar previews
-            document.getElementById("preview-foto").innerHTML = "";
-            document.getElementById("preview-audio").innerHTML = "";
-
-        })
-        .catch(function (error) {
-
-            console.error("Error EmailJS:", error);
-
-            alert("Error al enviar el correo.");
-        });
-});
-
-// PREVISUALIZACIÓN DE IMÁGENES
-document.getElementById("foto").addEventListener("change", function (event) {
-
-    const preview = document.getElementById("preview-foto");
-
-    preview.innerHTML = "";
-
-    const files = event.target.files;
-
-    for (let i = 0; i < files.length; i++) {
-
-        const reader = new FileReader();
-
-        reader.onload = function (e) {
-
-            const img = document.createElement("img");
-
-            img.src = e.target.result;
-
-            img.style.width = "100px";
-            img.style.margin = "5px";
-            img.style.borderRadius = "10px";
-
-            preview.appendChild(img);
-        };
-
-        reader.readAsDataURL(files[i]);
-    }
-});
-
-// GRABACIÓN DE AUDIO
+// Variables globales para la grabación de audio
 let mediaRecorder;
 let audioChunks = [];
+let audioBlob = null;
 
-const btnRecord = document.getElementById("btn-record");
-const btnStop = document.getElementById("btn-stop");
+document.addEventListener('DOMContentLoaded', () => {
+    
+    // === ELEMENTOS DEL DOM ===
+    const form = document.getElementById('form-servicio');
+    const btnWhatsapp = document.getElementById('btn-whatsapp');
+    const btnEmail = document.getElementById('btn-email');
+    
+    const inputFoto = document.getElementById('foto');
+    const previewFoto = document.getElementById('preview-foto');
+    
+    const btnRecord = document.getElementById('btn-record');
+    const btnStop = document.getElementById('btn-stop');
+    const previewAudio = document.getElementById('preview-audio');
 
-btnRecord.addEventListener("click", async function () {
+    // === 1. MANEJO DE EVIDENCIA: FOTOGRAFÍA ===
+    inputFoto.addEventListener('change', (e) => {
+        previewFoto.innerHTML = ''; // Limpiar previsualización anterior
+        const file = e.target.files[0];
+        
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const img = document.createElement('img');
+                img.src = event.target.result;
+                img.style.maxWidth = '100%';
+                img.style.borderRadius = '8px';
+                img.style.marginTop = '10px';
+                previewFoto.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
 
-    try {
-
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-
-        mediaRecorder = new MediaRecorder(stream);
-
-        mediaRecorder.start();
-
+    // === 2. MANEJO DE EVIDENCIA: NOTA DE VOZ ===
+    btnRecord.addEventListener('click', async () => {
         audioChunks = [];
+        previewAudio.innerHTML = '<p style="color: #e11d48; font-weight: bold;">🔴 Grabando audio...</p>';
+        
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            
+            mediaRecorder.ondataavailable = (e) => {
+                if (e.data.size > 0) {
+                    audioChunks.push(e.data);
+                }
+            };
 
-        mediaRecorder.addEventListener("dataavailable", event => {
-            audioChunks.push(event.data);
-        });
+            mediaRecorder.onstop = () => {
+                audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
+                const audioUrl = URL.createObjectURL(audioBlob);
+                
+                // Crear reproductor de audio nativo en el preview
+                previewAudio.innerHTML = '';
+                const audioEl = document.createElement('audio');
+                audioEl.src = audioUrl;
+                audioEl.controls = true;
+                audioEl.style.marginTop = '10px';
+                audioEl.style.width = '100%';
+                previewAudio.appendChild(audioEl);
+                
+                // Detener todos los tracks del micrófono para liberar el hardware
+                stream.getTracks().forEach(track => track.stop());
+            };
 
-        mediaRecorder.addEventListener("stop", () => {
+            mediaRecorder.start();
+            btnRecord.disabled = true;
+            btnStop.disabled = false;
+            
+        } catch (err) {
+            console.error('Error al acceder al micrófono:', err);
+            previewAudio.innerHTML = '<p style="color: #84cc16;">⚠️ Permiso de micrófono denegado o no soportado.</p>';
+        }
+    });
 
-            const audioBlob = new Blob(audioChunks);
+    btnStop.addEventListener('click', () => {
+        if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+            mediaRecorder.stop();
+            btnRecord.disabled = false;
+            btnStop.disabled = true;
+        }
+    });
 
-            const audioUrl = URL.createObjectURL(audioBlob);
+    // === 3. ENVÍO DINÁMICO A WHATSAPP ===
+    btnWhatsapp.addEventListener('click', () => {
+        const nombre = document.getElementById('nombre').value.trim();
+        const telefono = document.getElementById('telefono').value.trim();
+        const fecha = document.getElementById('fecha').value;
+        const serie = document.getElementById('serie').value.trim();
+        const observaciones = document.getElementById('observaciones').value.trim();
 
-            const audio = document.createElement("audio");
+        // Validación estricta antes de redireccionar
+        if (!nombre || !telefono || !fecha || !serie || !observaciones) {
+            alert('Por favor, complete todos los campos requeridos en el formulario antes de generar el reporte de WhatsApp.');
+            return;
+        }
 
-            audio.controls = true;
+        // Limpieza del número telefónico (Deja solo dígitos)
+        const telefonoLimpio = telefono.replace(/\D/g, '');
+        // Valida e inserta el código de país Colombia (57) si no existe
+        const numeroDestino = telefonoLimpio.startsWith('57') ? telefonoLimpio : `57${telefonoLimpio}`;
 
-            audio.src = audioUrl;
+        // Estructura del Mensaje con formato profesional
+        const mensaje = `*INFOTEC - SERVIDEERE*\n` +
+                        `*Registro de Control Técnico*\n\n` +
+                        `• *Cliente:* ${nombre}\n` +
+                        `• *Teléfono:* ${telefonoLimpio}\n` +
+                        `• *Fecha:* ${fecha}\n` +
+                        `• *Serie Máquina:* ${serie}\n\n` +
+                        `*Observaciones:* \n${observaciones}\n\n` +
+                        `📸 _Nota: Las evidencias multimedia fueron capturadas y se procesarán en el reporte central de EmailJS._`;
 
-            const previewAudio = document.getElementById("preview-audio");
+        const urlWhatsapp = `https://wa.me/${numeroDestino}?text=${encodeURIComponent(mensaje)}`;
+        
+        // Abrir de forma segura en GitHub Pages sin perder el hilo de la app
+        window.open(urlWhatsapp, '_blank', 'noopener,noreferrer');
+    });
 
-            previewAudio.innerHTML = "";
+    // === 4. ENVÍO EN TIEMPO REAL A EMAILJS ===
+    form.addEventListener('submit', (event) => {
+        event.preventDefault(); // Evita comportamiento de recarga clásico
 
-            previewAudio.appendChild(audio);
-        });
+        // Cambiar estado visual del botón de envío
+        btnEmail.textContent = 'Guardando y Enviando...';
+        btnEmail.disabled = true;
 
-        btnRecord.disabled = true;
-        btnStop.disabled = false;
+        // Construcción de parámetros mapeando exactamente las llaves de tu plantilla en EmailJS
+        const templateParams = {
+            nombre: document.getElementById('nombre').value.trim(),
+            telefono: document.getElementById('telefono').value.trim(),
+            fecha: document.getElementById('fecha').value,
+            serie: document.getElementById('serie').value.trim(),
+            observaciones: document.getElementById('observaciones').value.trim()
+        };
 
-    } catch (error) {
-
-        console.error(error);
-
-        alert("No se pudo acceder al micrófono.");
-    }
-});
-
-btnStop.addEventListener("click", function () {
-
-    mediaRecorder.stop();
-
-    btnRecord.disabled = false;
-    btnStop.disabled = true;
+        // Disparo de correo vía SDK de EmailJS
+        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+            .then((response) => {
+                alert('¡Perfecto! El reporte técnico ha sido guardado y enviado por correo de manera exitosa.');
+                
+                // Reset de controles y limpieza de formularios
+                form.reset();
+                previewFoto.innerHTML = '';
+                previewAudio.innerHTML = '';
+                audioBlob = null;
+                
+                btnEmail.textContent = 'Guardar y Enviar Correo';
+                btnEmail.disabled = false;
+            }, (error) => {
+                console.error('Error crítico EmailJS:', error);
+                alert('Hubo un error al sincronizar con EmailJS. Por favor verifica tu conexión a internet o los identificadores del servicio.');
+                
+                btnEmail.textContent = 'Guardar y Enviar Correo';
+                btnEmail.disabled = false;
+            });
+    });
 });
