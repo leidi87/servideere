@@ -4,14 +4,17 @@
  * Totalmente adaptado para GitHub Pages y uso offline básico.
  */
 
+
 // === CONFIGURACIÓN DE CREDENCIALES EMAILJS ===
 const EMAILJS_SERVICE_ID = 'service_gmail'; // Cambia por tu Service ID si no usas el por defecto
 const EMAILJS_TEMPLATE_ID = 'template_suegftj'; // Tomado de tu captura de pantalla
+
 
 // Variables globales para la grabación de audio
 let mediaRecorder;
 let audioChunks = [];
 let audioBlob = null;
+
 
 document.addEventListener('DOMContentLoaded', () => {
     
@@ -26,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnRecord = document.getElementById('btn-record');
     const btnStop = document.getElementById('btn-stop');
     const previewAudio = document.getElementById('preview-audio');
+
 
     // === 1. MANEJO DE EVIDENCIA: FOTOGRAFÍA ===
     inputFoto.addEventListener('change', (e) => {
@@ -46,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+
     // === 2. MANEJO DE EVIDENCIA: NOTA DE VOZ ===
     btnRecord.addEventListener('click', async () => {
         audioChunks = [];
@@ -60,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     audioChunks.push(e.data);
                 }
             };
+
 
             mediaRecorder.onstop = () => {
                 audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
@@ -78,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 stream.getTracks().forEach(track => track.stop());
             };
 
+
             mediaRecorder.start();
             btnRecord.disabled = true;
             btnStop.disabled = false;
@@ -88,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+
     btnStop.addEventListener('click', () => {
         if (mediaRecorder && mediaRecorder.state !== 'inactive') {
             mediaRecorder.stop();
@@ -95,6 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btnStop.disabled = true;
         }
     });
+
 
     // === 3. ENVÍO DINÁMICO A WHATSAPP ===
     btnWhatsapp.addEventListener('click', () => {
@@ -104,16 +113,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const serie = document.getElementById('serie').value.trim();
         const observaciones = document.getElementById('observaciones').value.trim();
 
+
         // Validación estricta antes de redireccionar
         if (!nombre || !telefono || !fecha || !serie || !observaciones) {
             alert('Por favor, complete todos los campos requeridos en el formulario antes de generar el reporte de WhatsApp.');
             return;
         }
 
+
         // Limpieza del número telefónico (Deja solo dígitos)
         const telefonoLimpio = telefono.replace(/\D/g, '');
         // Valida e inserta el código de país Colombia (57) si no existe
         const numeroDestino = telefonoLimpio.startsWith('57') ? telefonoLimpio : `57${telefonoLimpio}`;
+
 
         // Estructura del Mensaje con formato profesional
         const mensaje = `*INFOTEC - SERVIDEERE*\n` +
@@ -125,19 +137,23 @@ document.addEventListener('DOMContentLoaded', () => {
                         `*Observaciones:* \n${observaciones}\n\n` +
                         `📸 _Nota: Las evidencias multimedia fueron capturadas y se procesarán en el reporte central de EmailJS._`;
 
+
         const urlWhatsapp = `https://wa.me/${numeroDestino}?text=${encodeURIComponent(mensaje)}`;
         
         // Abrir de forma segura en GitHub Pages sin perder el hilo de la app
         window.open(urlWhatsapp, '_blank', 'noopener,noreferrer');
     });
 
+
     // === 4. ENVÍO EN TIEMPO REAL A EMAILJS ===
     form.addEventListener('submit', (event) => {
         event.preventDefault(); // Evita comportamiento de recarga clásico
 
+
         // Cambiar estado visual del botón de envío
         btnEmail.textContent = 'Guardando y Enviando...';
         btnEmail.disabled = true;
+
 
         // Construcción de parámetros mapeando exactamente las llaves de tu plantilla en EmailJS
         const templateParams = {
@@ -147,6 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
             serie: document.getElementById('serie').value.trim(),
             observaciones: document.getElementById('observaciones').value.trim()
         };
+
 
         // Disparo de correo vía SDK de EmailJS
         emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
@@ -163,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 btnEmail.disabled = false;
             }, (error) => {
                 console.error('Error crítico EmailJS:', error);
-                alert('Hubo un error al sincronizar con EmailJS. Por favor verifica tu conexión a internet o los identificadores del servicio.');
+                alert('Hubo un error al sincronizar con EmailJS. Por favor verifica tu conexión a internet o los identificadores del servicio.')
                 
                 btnEmail.textContent = 'Guardar y Enviar Correo';
                 btnEmail.disabled = false;
