@@ -10,7 +10,7 @@
 
 const EMAILJS_PUBLIC_KEY = 'usISzyXbJH6rmsfGw';
 const EMAILJS_SERVICE_ID = 'service_ca8hppv';
-const EMAILJS_TEMPLATE_ID = 'template_suegftj';
+const EMAILJS_TEMPLATE_ID = 'template_n7qw2gn';
 
 /* =========================================================
    VARIABLES GLOBALES
