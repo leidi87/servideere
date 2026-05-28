@@ -1,265 +1,339 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>INFOTEC - SERVIDEERE</title>
 
     <!-- PWA -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1e293b">
+    <link rel="manifest" href="./manifest.json">
 
-    <!-- Estilos -->
-    <link rel="stylesheet" href="css/styles.css">
+    <meta
+        name="theme-color"
+        content="#1e293b"
+    >
 
-    <!-- Fuente -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- ESTILOS -->
+    <link
+        rel="stylesheet"
+        href="./css/styles.css"
+    >
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- FUENTES -->
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
 
-    <!-- EmailJS -->
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- EMAILJS -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"
+        defer
+    ></script>
+
 </head>
 
 <body>
 
-<main class="service-app">
+    <main class="service-app">
 
-    <!-- HEADER -->
-    <header class="service-app__header">
+        <!-- HEADER -->
+        <header class="service-app__header">
 
-        <div class="service-app__logo-container">
-            <img src="./servi_icon.jpg">
-                alt="Logo INFOTEC SERVIDEERE"
-                class="service-app__logo"
-            >
-        </div>
+            <div class="service-app__logo-container">
 
-        <h1 class="service-app__title">
-            INFOTEC - SERVIDEERE
-        </h1>
-
-        <p class="service-app__subtitle">
-            Registro de Control Técnico
-        </p>
-
-    </header>
-
-    <!-- FORMULARIO -->
-    <form id="form-servicio" class="service-form">
-
-        <!-- CLIENTE -->
-        <fieldset class="service-form__section">
-
-            <legend class="service-form__legend">
-                Registro de Cliente y Servicio
-            </legend>
-
-            <div class="service-form__group">
-                <label class="service-form__label" for="nombre">
-                    Nombre del Cliente:
-                </label>
-
-                <input
-                    class="service-form__input"
-                    type="text"
-                    id="nombre"
-                    name="nombre"
-                    required
-                    placeholder="Nombre completo del cliente"
-                >
-            </div>
-
-            <div class="service-form__group">
-                <label class="service-form__label" for="telefono">
-                    Número de Teléfono:
-                </label>
-
-                <input
-                    class="service-form__input"
-                    type="tel"
-                    id="telefono"
-                    name="telefono"
-                    required
-                    placeholder="Ej. 3171234567"
-                    pattern="[0-9+ ]{7,15}"
-                >
-            </div>
-
-            <div class="service-form__group">
-                <label class="service-form__label" for="fecha">
-                    Fecha del Servicio:
-                </label>
-
-                <input
-                    class="service-form__input"
-                    type="date"
-                    id="fecha"
-                    name="fecha"
-                    required
-                >
-            </div>
-
-        </fieldset>
-
-        <!-- MAQUINARIA -->
-        <fieldset class="service-form__section">
-
-            <legend class="service-form__legend">
-                Información de la Maquinaria
-            </legend>
-
-            <div class="service-form__group">
-                <label class="service-form__label" for="serie">
-                    Número de Serie:
-                </label>
-
-                <input
-                    class="service-form__input"
-                    type="text"
-                    id="serie"
-                    name="serie"
-                    required
-                    placeholder="Ej. JDX12345678"
-                >
-            </div>
-
-            <div class="service-form__group">
-                <label class="service-form__label" for="observaciones">
-                    Observaciones Técnicas:
-                </label>
-
-                <textarea
-                    class="service-form__textarea"
-                    id="observaciones"
-                    name="observaciones"
-                    rows="4"
-                    required
-                    placeholder="Detalles de la reparación o fallas..."
-                ></textarea>
-            </div>
-
-        </fieldset>
-
-        <!-- MULTIMEDIA -->
-        <fieldset class="service-form__section">
-
-            <legend class="service-form__legend">
-                Evidencias Multimedia
-            </legend>
-
-            <div class="service-form__group">
-
-                <label class="service-form__label" for="foto">
-                    Capturar o Adjuntar Fotografías:
-                </label>
-
-                <input
-                    class="service-form__input"
-                    type="file"
-                    id="foto"
-                    accept="image/*"
-                    capture="environment"
-                    multiple
+                <img
+                    src="./servi_icon.jpg"
+                    alt="Logo INFOTEC SERVIDEERE"
+                    class="service-app__logo"
                 >
 
-                <div id="preview-foto" class="service-form__preview"></div>
-
             </div>
 
-            <div class="service-form__group">
+            <h1 class="service-app__title">
+                INFOTEC - SERVIDEERE
+            </h1>
 
-                <label class="service-form__label">
-                    Grabar Nota de Voz:
-                </label>
+            <p class="service-app__subtitle">
+                Registro de Control Técnico
+            </p>
 
-                <div class="audio-control">
+        </header>
 
-                    <button
-                        type="button"
-                        id="btn-record"
-                        class="audio-control__button audio-control__button--record"
+        <!-- FORMULARIO -->
+        <form
+            id="form-servicio"
+            class="service-form"
+        >
+
+            <!-- CLIENTE -->
+            <fieldset class="service-form__section">
+
+                <legend class="service-form__legend">
+                    Registro de Cliente y Servicio
+                </legend>
+
+                <div class="service-form__group">
+
+                    <label
+                        class="service-form__label"
+                        for="nombre"
                     >
-                        Grabar Audio
-                    </button>
+                        Nombre del Cliente:
+                    </label>
 
-                    <button
-                        type="button"
-                        id="btn-stop"
-                        class="audio-control__button audio-control__button--stop"
-                        disabled
+                    <input
+                        class="service-form__input"
+                        type="text"
+                        id="nombre"
+                        name="nombre"
+                        required
+                        autocomplete="name"
+                        placeholder="Nombre completo del cliente"
                     >
-                        Detener
-                    </button>
 
                 </div>
 
-                <div id="preview-audio" class="service-form__preview"></div>
+                <div class="service-form__group">
+
+                    <label
+                        class="service-form__label"
+                        for="telefono"
+                    >
+                        Número de Teléfono:
+                    </label>
+
+                    <input
+                        class="service-form__input"
+                        type="tel"
+                        id="telefono"
+                        name="telefono"
+                        required
+                        inputmode="numeric"
+                        autocomplete="tel"
+                        placeholder="Ej. 3171234567"
+                        pattern="[0-9+ ]{7,15}"
+                    >
+
+                </div>
+
+                <div class="service-form__group">
+
+                    <label
+                        class="service-form__label"
+                        for="fecha"
+                    >
+                        Fecha del Servicio:
+                    </label>
+
+                    <input
+                        class="service-form__input"
+                        type="date"
+                        id="fecha"
+                        name="fecha"
+                        required
+                    >
+
+                </div>
+
+            </fieldset>
+
+            <!-- MAQUINARIA -->
+            <fieldset class="service-form__section">
+
+                <legend class="service-form__legend">
+                    Información de la Maquinaria
+                </legend>
+
+                <div class="service-form__group">
+
+                    <label
+                        class="service-form__label"
+                        for="serie"
+                    >
+                        Número de Serie:
+                    </label>
+
+                    <input
+                        class="service-form__input"
+                        type="text"
+                        id="serie"
+                        name="serie"
+                        required
+                        placeholder="Ej. JDX12345678"
+                    >
+
+                </div>
+
+                <div class="service-form__group">
+
+                    <label
+                        class="service-form__label"
+                        for="observaciones"
+                    >
+                        Observaciones Técnicas:
+                    </label>
+
+                    <textarea
+                        class="service-form__textarea"
+                        id="observaciones"
+                        name="observaciones"
+                        rows="4"
+                        required
+                        placeholder="Detalles de la reparación o fallas..."
+                    ></textarea>
+
+                </div>
+
+            </fieldset>
+
+            <!-- MULTIMEDIA -->
+            <fieldset class="service-form__section">
+
+                <legend class="service-form__legend">
+                    Evidencias Multimedia
+                </legend>
+
+                <div class="service-form__group">
+
+                    <label
+                        class="service-form__label"
+                        for="foto"
+                    >
+                        Capturar o Adjuntar Fotografías:
+                    </label>
+
+                    <input
+                        class="service-form__input"
+                        type="file"
+                        id="foto"
+                        accept="image/*"
+                        capture="environment"
+                        multiple
+                    >
+
+                    <div
+                        id="preview-foto"
+                        class="service-form__preview"
+                    ></div>
+
+                </div>
+
+                <div class="service-form__group">
+
+                    <label class="service-form__label">
+                        Grabar Nota de Voz:
+                    </label>
+
+                    <div class="audio-control">
+
+                        <button
+                            type="button"
+                            id="btn-record"
+                            class="audio-control__button audio-control__button--record"
+                        >
+                            Grabar Audio
+                        </button>
+
+                        <button
+                            type="button"
+                            id="btn-stop"
+                            class="audio-control__button audio-control__button--stop"
+                            disabled
+                        >
+                            Detener
+                        </button>
+
+                    </div>
+
+                    <div
+                        id="preview-audio"
+                        class="service-form__preview"
+                    ></div>
+
+                </div>
+
+            </fieldset>
+
+            <!-- BOTONES -->
+            <div class="service-form__actions">
+
+                <button
+                    type="button"
+                    id="btn-whatsapp"
+                    class="service-form__btn service-form__btn--whatsapp"
+                >
+                    Enviar por WhatsApp
+                </button>
+
+                <button
+                    type="submit"
+                    id="btn-email"
+                    class="service-form__btn service-form__btn--email"
+                >
+                    Guardar y Enviar al Correo
+                </button>
 
             </div>
 
-        </fieldset>
+        </form>
 
-        <!-- BOTONES -->
-        <div class="service-form__actions">
+    </main>
 
-            <button
-                type="button"
-                id="btn-whatsapp"
-                class="service-form__btn service-form__btn--whatsapp"
-            >
-                Enviar por WhatsApp
-            </button>
+    <!-- JS PRINCIPAL -->
+    <script
+        src="./js/app.js"
+        defer
+    ></script>
 
-            <button
-                type="submit"
-                id="btn-email"
-                class="service-form__btn service-form__btn--email"
-            >
-                Guardar y Enviar al Correo
-            </button>
+    <!-- WHATSAPP -->
+    <script>
 
-        </div>
+        document.getElementById('btn-whatsapp').addEventListener('click', () => {
 
-    </form>
+            const nombre = document.getElementById('nombre').value.trim();
+            const telefono = document.getElementById('telefono').value.trim();
+            const fecha = document.getElementById('fecha').value;
+            const serie = document.getElementById('serie').value.trim();
+            const observaciones = document.getElementById('observaciones').value.trim();
 
-</main>
+            // VALIDACIÓN
+            if (!nombre || !telefono || !fecha || !serie || !observaciones) {
 
-<!-- JS PRINCIPAL -->
-<script src="js/app.js"></script>
+                alert('Por favor complete todos los campos.');
 
-<!-- WHATSAPP -->
-<script>
+                return;
+            }
 
-document.getElementById('btn-whatsapp').addEventListener('click', () => {
+            // LIMPIAR TELÉFONO
+            let telefonoLimpio = telefono.replace(/\D/g, '');
 
-    const nombre = document.getElementById('nombre').value.trim();
-    const telefono = document.getElementById('telefono').value.trim();
-    const fecha = document.getElementById('fecha').value;
-    const serie = document.getElementById('serie').value.trim();
-    const observaciones = document.getElementById('observaciones').value.trim();
+            // AGREGAR PREFIJO COLOMBIA
+            if (!telefonoLimpio.startsWith('57')) {
 
-    // VALIDACIÓN
-    if (!nombre || !telefono || !fecha || !serie || !observaciones) {
+                telefonoLimpio = `57${telefonoLimpio}`;
+            }
 
-        alert('Por favor complete todos los campos.');
-
-        return;
-    }
-
-    // LIMPIAR TELÉFONO
-    let telefonoLimpio = telefono.replace(/\D/g, '');
-
-    // AGREGAR 57 SI NO EXISTE
-    if (!telefonoLimpio.startsWith('57')) {
-
-        telefonoLimpio = `57${telefonoLimpio}`;
-    }
-
-    // MENSAJE
-    const mensaje = `
+            // MENSAJE
+            const mensaje = `
 *INFOTEC - SERVIDEERE*
 *Registro de Control Técnico*
 
@@ -273,42 +347,44 @@ ${observaciones}
 📸 Las evidencias multimedia fueron respaldadas en el correo técnico.
 `;
 
-    // URL WHATSAPP
-    const urlWhatsapp = `https://wa.me/${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
+            // URL WHATSAPP
+            const urlWhatsapp =
+                `https://wa.me/${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
 
-    // ABRIR
-    window.open(urlWhatsapp, '_blank');
+            // ABRIR
+            window.open(urlWhatsapp, '_blank');
 
-});
+        });
 
-</script>
+    </script>
 
-<!-- SERVICE WORKER -->
-<script>
+    <!-- SERVICE WORKER -->
+    <script>
 
-if ('serviceWorker' in navigator) {
+        if ('serviceWorker' in navigator) {
 
-    window.addEventListener('load', () => {
+            window.addEventListener('load', () => {
 
-        navigator.serviceWorker.register('./sw.js')
+                navigator.serviceWorker.register('./sw.js')
 
-            .then(() => {
+                    .then(() => {
 
-                console.log('Service Worker registrado correctamente.');
+                        console.log('Service Worker registrado correctamente.');
 
-            })
+                    })
 
-            .catch(error => {
+                    .catch(error => {
 
-                console.error('Error registrando Service Worker:', error);
+                        console.error('Error registrando Service Worker:', error);
+
+                    });
 
             });
 
-    });
+        }
 
-}
-
-</script>
+    </script>
 
 </body>
+
 </html>
