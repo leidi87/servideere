@@ -10,7 +10,7 @@
    CONFIGURACIÓN EMAILJS
 ========================================================= */
 
-const EMAILJS_PUBLIC_KEY = 'TU_PUBLIC_KEY';
+const EMAILJS_PUBLIC_KEY = '26egLDQpcS@b@W5';
 const EMAILJS_SERVICE_ID = 'service_gmail';
 const EMAILJS_TEMPLATE_ID = 'template_suegftj';
 
