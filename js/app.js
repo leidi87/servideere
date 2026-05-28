@@ -10,10 +10,11 @@
    CONFIGURACIÓN EMAILJS
 ========================================================= */
 
-const EMAILJS_PUBLIC_KEY = '26egLDQpcS@b@W5';
-const EMAILJS_SERVICE_ID = 'service_gmail';
-const EMAILJS_TEMPLATE_ID = 'template_suegftj';
+const EMAILJS_PUBLIC_KEY = 'usISzyXbJH6rmsfGw';
 
+const EMAILJS_SERVICE_ID = 'service_ca8hppv';
+
+const EMAILJS_TEMPLATE_ID = 'template_suegftj';
 
 /* =========================================================
    VARIABLES GLOBALES
@@ -30,9 +31,9 @@ let audioBlob = null;
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Inicializar EmailJS
     emailjs.init(EMAILJS_PUBLIC_KEY);
 
+});
 
     /* =====================================================
        ELEMENTOS DOM
