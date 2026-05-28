@@ -1,19 +1,15 @@
-```javascript
 /**
  * INFOTEC - SERVIDEERE
  * app.js
  * Compatible con GitHub Pages + móviles + PWA
  */
 
-
 /* =========================================================
    CONFIGURACIÓN EMAILJS
 ========================================================= */
 
 const EMAILJS_PUBLIC_KEY = 'usISzyXbJH6rmsfGw';
-
 const EMAILJS_SERVICE_ID = 'service_ca8hppv';
-
 const EMAILJS_TEMPLATE_ID = 'template_suegftj';
 
 /* =========================================================
@@ -24,7 +20,6 @@ let mediaRecorder = null;
 let audioChunks = [];
 let audioBlob = null;
 
-
 /* =========================================================
    INICIAR APP
 ========================================================= */
@@ -32,8 +27,6 @@ let audioBlob = null;
 document.addEventListener('DOMContentLoaded', () => {
 
     emailjs.init(EMAILJS_PUBLIC_KEY);
-
-});
 
     /* =====================================================
        ELEMENTOS DOM
@@ -51,7 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnStop = document.getElementById('btn-stop');
 
     const previewAudio = document.getElementById('preview-audio');
-
 
     /* =====================================================
        PREVISUALIZACIÓN DE FOTOS
@@ -93,7 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
             reader.readAsDataURL(file);
         });
     });
-
 
     /* =====================================================
        GRABACIÓN DE AUDIO
@@ -142,7 +133,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 previewAudio.appendChild(audio);
 
-                // Liberar micrófono
                 stream.getTracks().forEach(track => track.stop());
             };
 
@@ -159,7 +149,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 '<p style="color:orange;">⚠️ Micrófono no permitido o no compatible.</p>';
         }
     });
-
 
     /* =====================================================
        DETENER AUDIO
@@ -178,7 +167,6 @@ document.addEventListener('DOMContentLoaded', () => {
             btnStop.disabled = true;
         }
     });
-
 
     /* =====================================================
        ENVIAR WHATSAPP
@@ -201,8 +189,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const observaciones =
             document.getElementById('observaciones').value.trim();
 
-
-        // Validación
         if (
             !nombre ||
             !telefono ||
@@ -211,27 +197,19 @@ document.addEventListener('DOMContentLoaded', () => {
             !observaciones
         ) {
 
-            alert(
-                'Por favor completa todos los campos.'
-            );
+            alert('Por favor completa todos los campos.');
 
             return;
         }
 
-
-        // Limpiar teléfono
         let telefonoLimpio =
             telefono.replace(/\D/g, '');
 
-
-        // Agregar código Colombia
         if (!telefonoLimpio.startsWith('57')) {
 
             telefonoLimpio = `57${telefonoLimpio}`;
         }
 
-
-        // Mensaje
         const mensaje =
 
 `*INFOTEC - SERVIDEERE*
@@ -248,10 +226,8 @@ ${observaciones}
 📸 Evidencias multimedia registradas correctamente.
 `;
 
-
         const urlWhatsapp =
             `https://wa.me/${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
-
 
         window.open(
             urlWhatsapp,
@@ -259,7 +235,6 @@ ${observaciones}
             'noopener,noreferrer'
         );
     });
-
 
     /* =====================================================
        ENVÍO EMAILJS
@@ -269,10 +244,8 @@ ${observaciones}
 
         event.preventDefault();
 
-
         btnEmail.disabled = true;
         btnEmail.textContent = 'Enviando...';
-
 
         try {
 
@@ -294,21 +267,14 @@ ${observaciones}
                     document.getElementById('observaciones').value.trim()
             };
 
-
-            // Enviar EmailJS
             await emailjs.send(
                 EMAILJS_SERVICE_ID,
                 EMAILJS_TEMPLATE_ID,
                 templateParams
             );
 
+            alert('✅ Reporte enviado correctamente.');
 
-            alert(
-                '✅ Reporte enviado correctamente.'
-            );
-
-
-            // Reset formulario
             form.reset();
 
             previewFoto.innerHTML = '';
@@ -316,14 +282,11 @@ ${observaciones}
 
             audioBlob = null;
 
-
         } catch (error) {
 
             console.error('Error EmailJS:', error);
 
-            alert(
-                '❌ Error enviando correo. Verifica EmailJS.'
-            );
+            alert('❌ Error enviando correo.');
 
         } finally {
 
@@ -335,4 +298,3 @@ ${observaciones}
     });
 
 });
-```
