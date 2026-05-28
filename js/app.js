@@ -26,7 +26,18 @@ let audioBlob = null;
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    emailjs.init(EMAILJS_PUBLIC_KEY);
+    /* =====================================================
+       VALIDAR EMAILJS
+    ===================================================== */
+
+    if (typeof emailjs !== 'undefined') {
+
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+
+    } else {
+
+        console.error('EmailJS no cargó correctamente.');
+    }
 
     /* =====================================================
        ELEMENTOS DOM
@@ -46,6 +57,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const previewAudio = document.getElementById('preview-audio');
 
     /* =====================================================
+       VALIDAR ELEMENTOS
+    ===================================================== */
+
+    if (
+        !form ||
+        !btnWhatsapp ||
+        !btnEmail ||
+        !inputFoto ||
+        !previewFoto ||
+        !btnRecord ||
+        !btnStop ||
+        !previewAudio
+    ) {
+
+        console.error('Faltan elementos HTML.');
+
+        return;
+    }
+
+    /* =====================================================
        PREVISUALIZACIÓN DE FOTOS
     ===================================================== */
 
@@ -56,12 +87,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const files = event.target.files;
 
         if (!files || files.length === 0) {
+
             return;
         }
 
         Array.from(files).forEach(file => {
 
             if (!file.type.startsWith('image/')) {
+
                 return;
             }
 
@@ -78,12 +111,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 img.style.borderRadius = '10px';
                 img.style.marginTop = '10px';
                 img.style.display = 'block';
+                img.loading = 'lazy';
 
                 previewFoto.appendChild(img);
             };
 
             reader.readAsDataURL(file);
+
         });
+
     });
 
     /* =====================================================
@@ -93,6 +129,16 @@ document.addEventListener('DOMContentLoaded', () => {
     btnRecord.addEventListener('click', async () => {
 
         try {
+
+            if (
+                !navigator.mediaDevices ||
+                !navigator.mediaDevices.getUserMedia
+            ) {
+
+                alert('El navegador no soporta grabación de audio.');
+
+                return;
+            }
 
             audioChunks = [];
 
@@ -119,11 +165,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     type: 'audio/webm'
                 });
 
-                const audioURL = URL.createObjectURL(audioBlob);
+                const audioURL =
+                    URL.createObjectURL(audioBlob);
 
                 previewAudio.innerHTML = '';
 
-                const audio = document.createElement('audio');
+                const audio =
+                    document.createElement('audio');
 
                 audio.controls = true;
                 audio.src = audioURL;
@@ -133,7 +181,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 previewAudio.appendChild(audio);
 
-                stream.getTracks().forEach(track => track.stop());
+                stream.getTracks().forEach(track => {
+
+                    track.stop();
+                });
+
             };
 
             mediaRecorder.start();
@@ -148,6 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
             previewAudio.innerHTML =
                 '<p style="color:orange;">⚠️ Micrófono no permitido o no compatible.</p>';
         }
+
     });
 
     /* =====================================================
@@ -166,6 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btnRecord.disabled = false;
             btnStop.disabled = true;
         }
+
     });
 
     /* =====================================================
@@ -189,6 +243,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const observaciones =
             document.getElementById('observaciones').value.trim();
 
+        /* VALIDACIÓN */
+
         if (
             !nombre ||
             !telefono ||
@@ -202,13 +258,19 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        /* LIMPIAR TELÉFONO */
+
         let telefonoLimpio =
             telefono.replace(/\D/g, '');
+
+        /* AGREGAR PREFIJO COLOMBIA */
 
         if (!telefonoLimpio.startsWith('57')) {
 
             telefonoLimpio = `57${telefonoLimpio}`;
         }
+
+        /* MENSAJE */
 
         const mensaje =
 
@@ -226,6 +288,8 @@ ${observaciones}
 📸 Evidencias multimedia registradas correctamente.
 `;
 
+        /* URL WHATSAPP */
+
         const urlWhatsapp =
             `https://wa.me/${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
 
@@ -234,6 +298,7 @@ ${observaciones}
             '_blank',
             'noopener,noreferrer'
         );
+
     });
 
     /* =====================================================
@@ -245,6 +310,7 @@ ${observaciones}
         event.preventDefault();
 
         btnEmail.disabled = true;
+
         btnEmail.textContent = 'Enviando...';
 
         try {
@@ -267,6 +333,8 @@ ${observaciones}
                     document.getElementById('observaciones').value.trim()
             };
 
+            /* ENVIAR EMAIL */
+
             await emailjs.send(
                 EMAILJS_SERVICE_ID,
                 EMAILJS_TEMPLATE_ID,
@@ -275,6 +343,8 @@ ${observaciones}
 
             alert('✅ Reporte enviado correctamente.');
 
+            /* LIMPIAR FORMULARIO */
+
             form.reset();
 
             previewFoto.innerHTML = '';
@@ -282,11 +352,16 @@ ${observaciones}
 
             audioBlob = null;
 
+            btnRecord.disabled = false;
+            btnStop.disabled = true;
+
         } catch (error) {
 
             console.error('Error EmailJS:', error);
 
-            alert('❌ Error enviando correo.');
+            alert(
+                '❌ Error enviando correo. Verifica EmailJS.'
+            );
 
         } finally {
 
@@ -295,6 +370,7 @@ ${observaciones}
             btnEmail.textContent =
                 'Guardar y Enviar al Correo';
         }
+
     });
 
 });
