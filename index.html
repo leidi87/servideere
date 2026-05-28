@@ -3,139 +3,313 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>INFOTEC - SERVIDEERE</title>
-    <!-- Vinculación del Manifiesto para poder instalar la app en zonas sin señal -->
+
+    <!-- PWA -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1e293b">
 
+    <!-- Estilos -->
     <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Fuente -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+    <!-- EmailJS -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
+
 <body>
 
-    <main class="service-app">
-        <header class="service-app__header">
-            <div class="service-app__logo-container">
-                <img src="servi_icon.jpg" alt="Logo INFOTEC SERVIDEERE" class="service-app__logo">
-            </div>
-            <h1 class="service-app__title">INFOTEC - SERVIDEERE</h1>
-            <p class="service-app__subtitle">Registro de Control Técnico</p>
-        </header>
+<main class="service-app">
 
-        <form id="form-servicio" class="service-form">
-            
-            <fieldset class="service-form__section">
-                <legend class="service-form__legend">Registro de Cliente y Servicio</legend>
-                
-                <div class="service-form__group">
-                    <label class="service-form__label" for="nombre">Nombre del Cliente:</label>
-                    <input class="service-form__input" type="text" id="nombre" required placeholder="Nombre completo del cliente">
-                </div>
+    <!-- HEADER -->
+    <header class="service-app__header">
 
-                <div class="service-form__group">
-                    <label class="service-form__label" for="telefono">Número de Teléfono:</label>
-                    <input class="service-form__input" type="tel" id="telefono" required placeholder="Ej. 3171234567">
-                </div>
+        <div class="service-app__logo-container">
+            <img
+                src="servi_icon.jpg"
+                alt="Logo INFOTEC SERVIDEERE"
+                class="service-app__logo"
+            >
+        </div>
 
-                <div class="service-form__group">
-                    <label class="service-form__label" for="fecha">Fecha del Servicio:</label>
-                    <input class="service-form__input" type="date" id="fecha" required>
-                </div>
-            </fieldset>
+        <h1 class="service-app__title">
+            INFOTEC - SERVIDEERE
+        </h1>
 
-            <fieldset class="service-form__section">
-                <legend class="service-form__legend">Información de la Maquinaria</legend>
+        <p class="service-app__subtitle">
+            Registro de Control Técnico
+        </p>
 
-                <div class="service-form__group">
-                    <label class="service-form__label" for="serie">Número de Serie de la Máquina:</label>
-                    <input class="service-form__input" type="text" id="serie" required placeholder="Ej. JDX12345678">
-                </div>
+    </header>
 
-                <div class="service-form__group">
-                    <label class="service-form__label" for="observaciones">Observaciones Técnicas:</label>
-                    <textarea class="service-form__textarea" id="observaciones" rows="4" required placeholder="Escribe aquí los detalles de la reparación o fallas encontradas..."></textarea>
-                </div>
-            </fieldset>
+    <!-- FORMULARIO -->
+    <form id="form-servicio" class="service-form">
 
-            <fieldset class="service-form__section">
-                <legend class="service-form__legend">Evidencias Multimedia</legend>
+        <!-- CLIENTE -->
+        <fieldset class="service-form__section">
 
-                <div class="service-form__group">
-                    <label class="service-form__label" for="foto">Capturar o Adjuntar Fotografías:</label>
-                   <input class="service-form__input" type="file" id="foto" accept="image/*" capture="environment" multiple>
-                    <div id="preview-foto" class="service-form__preview"></div>
-                </div>
+            <legend class="service-form__legend">
+                Registro de Cliente y Servicio
+            </legend>
 
-                <div class="service-form__group">
-                    <label class="service-form__label">Grabar Nota de Voz:</label>
-                    <div class="audio-control">
-                        <button type="button" id="btn-record" class="audio-control__button audio-control__button--record">Grabar Audio</button>
-                        <button type="button" id="btn-stop" class="audio-control__button audio-control__button--stop" disabled>Detener</button>
-                    </div>
-                    <div id="preview-audio" class="service-form__preview"></div>
-                </div>
-            </fieldset>
+            <div class="service-form__group">
+                <label class="service-form__label" for="nombre">
+                    Nombre del Cliente:
+                </label>
 
-            <div class="service-form__actions">
-                <button type="button" id="btn-whatsapp" class="service-form__btn service-form__btn--whatsapp">Enviar Notificación por WhatsApp</button>
-                <button type="submit" id="btn-email" class="service-form__btn service-form__btn--email">Guardar y Enviar al Correo</button>
+                <input
+                    class="service-form__input"
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                    required
+                    placeholder="Nombre completo del cliente"
+                >
             </div>
 
-        </form>
-    </main>
+            <div class="service-form__group">
+                <label class="service-form__label" for="telefono">
+                    Número de Teléfono:
+                </label>
 
-    <!-- Tu archivo principal de JavaScript -->
-    <script src="js/app.js"></script>
+                <input
+                    class="service-form__input"
+                    type="tel"
+                    id="telefono"
+                    name="telefono"
+                    required
+                    placeholder="Ej. 3171234567"
+                    pattern="[0-9+ ]{7,15}"
+                >
+            </div>
 
-    <!-- Código SOLUCIONADO para el envío dinámico a WhatsApp -->
-    <script>
-        document.getElementById('btn-whatsapp').addEventListener('click', function() {
-            const nombre = document.getElementById('nombre').value.trim();
-            const telefono = document.getElementById('telefono').value.trim();
-            const fecha = document.getElementById('fecha').value;
-            const serie = document.getElementById('serie').value.trim();
-            const observaciones = document.getElementById('observaciones').value.trim();
+            <div class="service-form__group">
+                <label class="service-form__label" for="fecha">
+                    Fecha del Servicio:
+                </label>
 
-            // Validación mejorada: Asegura que todos los campos requeridos estén llenos antes de enviar
-            if (!nombre || !telefono || !fecha || !serie || !observaciones) {
-                alert('Por favor, complete todos los campos del formulario antes de generar el reporte de WhatsApp.');
-                return;
-            }
+                <input
+                    class="service-form__input"
+                    type="date"
+                    id="fecha"
+                    name="fecha"
+                    required
+                >
+            </div>
 
-            // Dejamos solo los dígitos numéricos
-            const telefonoLimpio = telefono.replace(/\D/g, '');
-            
-            // Si el técnico no escribió el 57 de Colombia, se lo agregamos automáticamente
-            const numeroDestino = telefonoLimpio.startsWith('57') ? telefonoLimpio : `57${telefonoLimpio}`;
+        </fieldset>
 
-            const mensaje = `*INFOTEC - SERVIDEERE*\n` +
-                            `*Registro de Control Técnico*\n\n` +
-                            `• *Cliente:* ${nombre}\n` +
-                            `• *Fecha:* ${fecha}\n` +
-                            `• *Serie Máquina:* ${serie}\n` +
-                            `• *Observaciones:* ${observaciones}\n\n` +
-                            `📸 _Nota: Las evidencias fotográficas y notas de voz han sido respaldadas en el reporte técnico por correo. Recuerda adjuntar manualmente la foto del carrete en este chat para enviarla de inmediato._`;
+        <!-- MAQUINARIA -->
+        <fieldset class="service-form__section">
 
-            // ¡CORREGIDO AQUÍ!: Añadida la barra "/" y removidas las llaves incorrectas {}
-            const urlWhatsapp = `https://wa.me/${numeroDestino}?text=${encodeURIComponent(mensaje)}`;
+            <legend class="service-form__legend">
+                Información de la Maquinaria
+            </legend>
 
-            // Abre WhatsApp en una pestaña totalmente nueva de forma segura
-            window.open(urlWhatsapp, '_blank', 'noopener,noreferrer');
-        });
-    </script>
+            <div class="service-form__group">
+                <label class="service-form__label" for="serie">
+                    Número de Serie:
+                </label>
 
-    <!-- Registro de Service Worker para habilitar el uso offline -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('Service Worker cargado correctamente para trabajar sin señal.', reg))
-                    .catch(err => console.error('Error al registrar Service Worker:', err));
+                <input
+                    class="service-form__input"
+                    type="text"
+                    id="serie"
+                    name="serie"
+                    required
+                    placeholder="Ej. JDX12345678"
+                >
+            </div>
+
+            <div class="service-form__group">
+                <label class="service-form__label" for="observaciones">
+                    Observaciones Técnicas:
+                </label>
+
+                <textarea
+                    class="service-form__textarea"
+                    id="observaciones"
+                    name="observaciones"
+                    rows="4"
+                    required
+                    placeholder="Detalles de la reparación o fallas..."
+                ></textarea>
+            </div>
+
+        </fieldset>
+
+        <!-- MULTIMEDIA -->
+        <fieldset class="service-form__section">
+
+            <legend class="service-form__legend">
+                Evidencias Multimedia
+            </legend>
+
+            <div class="service-form__group">
+
+                <label class="service-form__label" for="foto">
+                    Capturar o Adjuntar Fotografías:
+                </label>
+
+                <input
+                    class="service-form__input"
+                    type="file"
+                    id="foto"
+                    accept="image/*"
+                    capture="environment"
+                    multiple
+                >
+
+                <div id="preview-foto" class="service-form__preview"></div>
+
+            </div>
+
+            <div class="service-form__group">
+
+                <label class="service-form__label">
+                    Grabar Nota de Voz:
+                </label>
+
+                <div class="audio-control">
+
+                    <button
+                        type="button"
+                        id="btn-record"
+                        class="audio-control__button audio-control__button--record"
+                    >
+                        Grabar Audio
+                    </button>
+
+                    <button
+                        type="button"
+                        id="btn-stop"
+                        class="audio-control__button audio-control__button--stop"
+                        disabled
+                    >
+                        Detener
+                    </button>
+
+                </div>
+
+                <div id="preview-audio" class="service-form__preview"></div>
+
+            </div>
+
+        </fieldset>
+
+        <!-- BOTONES -->
+        <div class="service-form__actions">
+
+            <button
+                type="button"
+                id="btn-whatsapp"
+                class="service-form__btn service-form__btn--whatsapp"
+            >
+                Enviar por WhatsApp
+            </button>
+
+            <button
+                type="submit"
+                id="btn-email"
+                class="service-form__btn service-form__btn--email"
+            >
+                Guardar y Enviar al Correo
+            </button>
+
+        </div>
+
+    </form>
+
+</main>
+
+<!-- JS PRINCIPAL -->
+<script src="js/app.js"></script>
+
+<!-- WHATSAPP -->
+<script>
+
+document.getElementById('btn-whatsapp').addEventListener('click', () => {
+
+    const nombre = document.getElementById('nombre').value.trim();
+    const telefono = document.getElementById('telefono').value.trim();
+    const fecha = document.getElementById('fecha').value;
+    const serie = document.getElementById('serie').value.trim();
+    const observaciones = document.getElementById('observaciones').value.trim();
+
+    // VALIDACIÓN
+    if (!nombre || !telefono || !fecha || !serie || !observaciones) {
+
+        alert('Por favor complete todos los campos.');
+
+        return;
+    }
+
+    // LIMPIAR TELÉFONO
+    let telefonoLimpio = telefono.replace(/\D/g, '');
+
+    // AGREGAR 57 SI NO EXISTE
+    if (!telefonoLimpio.startsWith('57')) {
+
+        telefonoLimpio = `57${telefonoLimpio}`;
+    }
+
+    // MENSAJE
+    const mensaje = `
+*INFOTEC - SERVIDEERE*
+*Registro de Control Técnico*
+
+👤 Cliente: ${nombre}
+📅 Fecha: ${fecha}
+🔧 Serie Máquina: ${serie}
+
+📝 Observaciones:
+${observaciones}
+
+📸 Las evidencias multimedia fueron respaldadas en el correo técnico.
+`;
+
+    // URL WHATSAPP
+    const urlWhatsapp = `https://wa.me/${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
+
+    // ABRIR
+    window.open(urlWhatsapp, '_blank');
+
+});
+
+</script>
+
+<!-- SERVICE WORKER -->
+<script>
+
+if ('serviceWorker' in navigator) {
+
+    window.addEventListener('load', () => {
+
+        navigator.serviceWorker.register('./sw.js')
+
+            .then(() => {
+
+                console.log('Service Worker registrado correctamente.');
+
+            })
+
+            .catch(error => {
+
+                console.error('Error registrando Service Worker:', error);
+
             });
-        }
-    </script>
+
+    });
+
+}
+
+</script>
+
 </body>
 </html>
