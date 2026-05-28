@@ -79,11 +79,12 @@
         </header>
 
         <!-- FORMULARIO -->
-        <form
-            id="form-servicio"
-            class="service-form"
+       <form
+    id="form-servicio"
+    class="service-form"
+    action="https://formspree.io/f/TU_ID_AQUI"
+    method="POST"
         >
-
             <!-- CLIENTE -->
             <fieldset class="service-form__section">
 
@@ -155,6 +156,19 @@
                 </div>
 
             </fieldset>
+           <fieldset class="service-form__section">
+                <legend class="service-form__legend">Información de la Maquinaria</legend>
+                <div class="service-form__group">
+                    <label class="service-form__label" for="serie">Número de Serie de la Máquina:</label>
+                    <input class="service-form__input" type="text" id="serie" name="serie" required>
+                </div>
+            </fieldset>
+
+            <button type="submit" class="service-form__button">
+                Enviar Registro
+            </button>
+
+        </form>
 
             <!-- MAQUINARIA -->
             <fieldset class="service-form__section">
