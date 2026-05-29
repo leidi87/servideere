@@ -1,42 +1,47 @@
 const CACHE_NAME = 'servideere-v1';
-// Lista de archivos que se guardarán para usar sin internet
+
 const ASSETS = [
   './',
   './index.html',
   './css/styles.css',
   './js/app.js',
-  './servi_icon.jpg'
+  './manifest.json',        // ✅ agregado
+  './icons/icon-192.png',   // ✅ cuando cambies el ícono
+  './icons/icon-512.png'
 ];
 
-// Instala el Service Worker y guarda los archivos en caché
+// INSTALAR
 self.addEventListener('install', (e) => {
   e.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS);
-    }).then(() => self.skipWaiting())
+    caches.open(CACHE_NAME)
+      .then((cache) => cache.addAll(ASSETS))
+      .then(() => self.skipWaiting()) // ✅ activa inmediatamente
   );
 });
 
-// Activa el Service Worker y limpia cachés viejos
+// ACTIVAR
 self.addEventListener('activate', (e) => {
   e.waitUntil(
-    caches.keys().then((keys) => {
-      return Promise.all(
+    caches.keys().then((keys) =>
+      Promise.all(
         keys.map((key) => {
-          if (key !== CACHE_NAME) {
-            return caches.delete(key);
-          }
+          if (key !== CACHE_NAME) return caches.delete(key);
         })
-      );
-    })
+      )
+    ).then(() => self.clients.claim()) // ✅ toma control sin recargar
   );
 });
 
-// Estrategia: Buscar primero en internet, si falla (offline), usar la caché
+// FETCH — Cache First (offline primero, luego red)
 self.addEventListener('fetch', (e) => {
   e.respondWith(
-    fetch(e.request).catch(() => {
-      return caches.match(e.request);
+    caches.match(e.request).then((cached) => {
+      return cached || fetch(e.request).catch(() => {
+        // Fallback para navegación offline
+        if (e.request.mode === 'navigate') {
+          return caches.match('./index.html');
+        }
+      });
     })
   );
 });
