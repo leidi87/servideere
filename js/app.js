@@ -333,12 +333,13 @@ ${observaciones}
                     document.getElementById('observaciones').value.trim()
             };
 
-            /* ENVIAR EMAIL */
+            /* ENVIAR EMAIL — ✅ Se agrega EMAILJS_PUBLIC_KEY como 4to parámetro */
 
             await emailjs.send(
                 EMAILJS_SERVICE_ID,
                 EMAILJS_TEMPLATE_ID,
-                templateParams
+                templateParams,
+                EMAILJS_PUBLIC_KEY  // ✅ CORRECCIÓN: public key explícita en cada envío
             );
 
             alert('✅ Reporte enviado correctamente.');
