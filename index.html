@@ -19,7 +19,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
-    <!-- EMAILJS — inicializado en el script al final -->
+    <!-- EMAILJS -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
 
 </head>
@@ -40,7 +40,6 @@
 
         </header>
 
-        <!-- ✅ UN SOLO FORMULARIO — todo adentro -->
         <form id="form-servicio" class="service-form">
 
             <!-- SECCIÓN 1: CLIENTE -->
@@ -89,7 +88,7 @@
 
             </fieldset>
 
-            <!-- SECCIÓN 2: MAQUINARIA — ✅ solo uno, con placeholder -->
+            <!-- SECCIÓN 2: MAQUINARIA -->
             <fieldset class="service-form__section">
 
                 <legend class="service-form__legend">Información de la Maquinaria</legend>
@@ -167,98 +166,11 @@
             </div>
 
         </form>
-        <!-- ✅ CIERRE ÚNICO del formulario -->
 
     </main>
 
-    <!-- JS PRINCIPAL -->
+    <!-- ✅ ÚNICO script JS — toda la lógica está en app.js -->
     <script src="./js/app.js" defer></script>
-
-    <!-- WHATSAPP -->
-    <script>
-        document.getElementById('btn-whatsapp').addEventListener('click', () => {
-
-            const nombre = document.getElementById('nombre').value.trim();
-            const telefono = document.getElementById('telefono').value.trim();
-            const fecha = document.getElementById('fecha').value;
-            const serie = document.getElementById('serie').value.trim();
-            const observaciones = document.getElementById('observaciones').value.trim();
-
-            // VALIDACIÓN
-            if (!nombre || !telefono || !fecha || !serie || !observaciones) {
-                alert('Por favor complete todos los campos.');
-                return;
-            }
-
-            // LIMPIAR TELÉFONO Y AGREGAR PREFIJO COLOMBIA
-            let telefonoLimpio = telefono.replace(/\D/g, '');
-            if (!telefonoLimpio.startsWith('57')) {
-                telefonoLimpio = `57${telefonoLimpio}`;
-            }
-
-            // MENSAJE
-            const mensaje = `
-*INFOTEC - SERVIDEERE*
-*Registro de Control Técnico*
-
-👤 Cliente: ${nombre}
-📅 Fecha: ${fecha}
-🔧 Serie Máquina: ${serie}
-
-📝 Observaciones:
-${observaciones}
-
-📸 Las evidencias multimedia fueron respaldadas en el correo técnico.
-`;
-
-            // ABRIR WHATSAPP
-            const urlWhatsapp = `https://wa.me/${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
-            window.open(urlWhatsapp, '_blank');
-
-        });
-    </script>
-
-    <!-- EMAILJS: inicializar con tu Public Key -->
-    <script>
-        window.addEventListener('load', () => {
-            // ✅ Reemplaza 'TU_PUBLIC_KEY' con la clave de tu cuenta EmailJS
-            emailjs.init('usISzyXbJH6rmsfGw');
-        });
-
-        document.getElementById('form-servicio').addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            const nombre = document.getElementById('nombre').value.trim();
-            const telefono = document.getElementById('telefono').value.trim();
-            const fecha = document.getElementById('fecha').value;
-            const serie = document.getElementById('serie').value.trim();
-            const observaciones = document.getElementById('observaciones').value.trim();
-
-            if (!nombre || !telefono || !fecha || !serie || !observaciones) {
-                alert('Por favor complete todos los campos.');
-                return;
-            }
-
-            // ✅ Reemplaza 'TU_SERVICE_ID' y 'TU_TEMPLATE_ID' con los de tu cuenta EmailJS
-            emailjs.send('TU_SERVICE_ID', 'TU_TEMPLATE_ID', {
-                nombre,
-                telefono,
-                fecha,
-                serie,
-                observaciones
-            })
-            .then(() => {
-                alert('✅ Registro enviado al correo correctamente.');
-                e.target.reset();
-                document.getElementById('preview-foto').innerHTML = '';
-                document.getElementById('preview-audio').innerHTML = '';
-            })
-            .catch((error) => {
-                console.error('Error EmailJS:', error);
-                alert('❌ Error al enviar el correo. Revisa la consola.');
-            });
-        });
-    </script>
 
     <!-- SERVICE WORKER -->
     <script>
