@@ -1,0 +1,115 @@
+# 1. ARCHIVO NUEVO → js/db.js
+
+```javascript
+/* =====================================================
+   BASE DE DATOS OFFLINE - SERVIDEERE
+===================================================== */
+
+const DB_NAME = 'servideereDB';
+const DB_VERSION = 1;
+const STORE_NAME = 'mantenimientos';
+
+/* =====================================================
+   ABRIR BASE DE DATOS
+===================================================== */
+
+function abrirDB() {
+
+    return new Promise((resolve, reject) => {
+
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+        request.onupgradeneeded = (e) => {
+
+            const db = e.target.result;
+
+            if (!db.objectStoreNames.contains(STORE_NAME)) {
+
+                db.createObjectStore(STORE_NAME, {
+                    keyPath: 'id',
+                    autoIncrement: true
+                });
+            }
+        };
+
+        request.onsuccess = () => resolve(request.result);
+
+        request.onerror = () => reject(request.error);
+    });
+}
+
+/* =====================================================
+   GUARDAR OFFLINE
+===================================================== */
+
+async function guardarOffline(data) {
+
+    const db = await abrirDB();
+
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+
+    const store = tx.objectStore(STORE_NAME);
+
+    store.add({
+        ...data,
+        enviado: false,
+        fechaGuardado: new Date().toISOString()
+    });
+
+    console.log('✅ Guardado offline');
+}
+
+/* =====================================================
+   OBTENER PENDIENTES
+===================================================== */
+
+async function obtenerPendientes() {
+
+    const db = await abrirDB();
+
+    return new Promise((resolve, reject) => {
+
+        const tx = db.transaction(STORE_NAME, 'readonly');
+
+        const store = tx.objectStore(STORE_NAME);
+
+        const request = store.getAll();
+
+        request.onsuccess = () => {
+
+            const pendientes =
+                request.result.filter(item => !item.enviado);
+
+            resolve(pendientes);
+        };
+
+        request.onerror = () => reject(request.error);
+    });
+}
+
+/* =====================================================
+   MARCAR COMO ENVIADO
+===================================================== */
+
+async function marcarEnviado(id) {
+
+    const db = await abrirDB();
+
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+
+    const store = tx.objectStore(STORE_NAME);
+
+    const request = store.get(id);
+
+    request.onsuccess = () => {
+
+        const data = request.result;
+
+        data.enviado = true;
+
+        store.put(data);
+
+        console.log('✅ Registro sincronizado');
+    };
+}
+```
