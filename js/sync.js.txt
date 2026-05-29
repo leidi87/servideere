@@ -1,0 +1,78 @@
+# 2. ARCHIVO NUEVO → js/sync.js
+
+```javascript
+/* =====================================================
+   DETECTOR DE INTERNET
+===================================================== */
+
+function actualizarEstadoConexion() {
+
+    const estado = document.getElementById('estadoConexion');
+
+    if (!estado) return;
+
+    if (navigator.onLine) {
+
+        estado.innerHTML = '🟢 Online';
+
+    } else {
+
+        estado.innerHTML = '🔴 Offline';
+    }
+}
+
+/* =====================================================
+   EVENTOS DE INTERNET
+===================================================== */
+
+window.addEventListener('online', () => {
+
+    actualizarEstadoConexion();
+
+    sincronizarPendientes();
+});
+
+window.addEventListener('offline', actualizarEstadoConexion);
+
+/* =====================================================
+   SINCRONIZAR PENDIENTES
+===================================================== */
+
+async function sincronizarPendientes() {
+
+    if (!navigator.onLine) return;
+
+    const pendientes = await obtenerPendientes();
+
+    console.log('📦 Pendientes:', pendientes);
+
+    for (const item of pendientes) {
+
+        try {
+
+            console.log('🚀 Enviando:', item);
+
+            /* =====================================================
+               AQUÍ IRÁ EMAILJS O FIREBASE
+            ===================================================== */
+
+            await marcarEnviado(item.id);
+
+        } catch (error) {
+
+            console.error('❌ Error sincronizando', error);
+        }
+    }
+}
+
+/* =====================================================
+   INICIAR
+===================================================== */
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    actualizarEstadoConexion();
+
+    sincronizarPendientes();
+});
+```
