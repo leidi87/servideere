@@ -1,54 +1,137 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
     <title>INFOTEC - SERVIDEERE</title>
 
-    <!-- PWA -->
+    <!-- =====================================================
+         PWA
+    ====================================================== -->
+
     <link rel="manifest" href="./manifest.json">
+
     <meta name="theme-color" content="#1e293b">
 
-    <!-- ESTILOS -->
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- =====================================================
+         ESTILOS
+    ====================================================== -->
+
     <link rel="stylesheet" href="./css/styles.css">
 
-    <!-- FUENTES -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- =====================================================
+         FUENTES
+    ====================================================== -->
 
-    <!-- EMAILJS -->
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- =====================================================
+         EMAILJS
+    ====================================================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"
+        defer
+    ></script>
 
 </head>
 
 <body>
 
+    <!-- =====================================================
+         ESTADO CONEXIÓN
+    ====================================================== -->
+
+    <div
+        id="estadoConexion"
+        style="
+            position: fixed;
+            bottom: 12px;
+            right: 12px;
+            background: #111827;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 12px;
+            z-index: 9999;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,.25);
+        "
+    >
+        Verificando conexión...
+    </div>
+
     <main class="service-app">
 
-        <!-- HEADER -->
+        <!-- =====================================================
+             HEADER
+        ====================================================== -->
+
         <header class="service-app__header">
 
             <div class="service-app__logo-container">
-                <img src="./servi_icon.jpg" alt="Logo INFOTEC SERVIDEERE" class="service-app__logo">
+
+                <img
+                    src="./servi_icon.jpg"
+                    alt="Logo INFOTEC SERVIDEERE"
+                    class="service-app__logo"
+                >
+
             </div>
 
-            <h1 class="service-app__title">INFOTEC - SERVIDEERE</h1>
-            <p class="service-app__subtitle">Registro de Control Técnico</p>
+            <h1 class="service-app__title">
+                INFOTEC - SERVIDEERE
+            </h1>
+
+            <p class="service-app__subtitle">
+                Registro de Control Técnico
+            </p>
 
         </header>
 
+        <!-- =====================================================
+             FORMULARIO
+        ====================================================== -->
+
         <form id="form-servicio" class="service-form">
 
-            <!-- SECCIÓN 1: CLIENTE -->
+            <!-- CLIENTE -->
+
             <fieldset class="service-form__section">
 
-                <legend class="service-form__legend">Registro de Cliente y Servicio</legend>
+                <legend class="service-form__legend">
+                    Registro de Cliente y Servicio
+                </legend>
 
                 <div class="service-form__group">
-                    <label class="service-form__label" for="nombre">Nombre del Cliente:</label>
+
+                    <label
+                        class="service-form__label"
+                        for="nombre"
+                    >
+                        Nombre del Cliente:
+                    </label>
+
                     <input
                         class="service-form__input"
                         type="text"
@@ -58,10 +141,18 @@
                         autocomplete="name"
                         placeholder="Nombre completo del cliente"
                     >
+
                 </div>
 
                 <div class="service-form__group">
-                    <label class="service-form__label" for="telefono">Número de Teléfono:</label>
+
+                    <label
+                        class="service-form__label"
+                        for="telefono"
+                    >
+                        Número de Teléfono:
+                    </label>
+
                     <input
                         class="service-form__input"
                         type="tel"
@@ -73,10 +164,18 @@
                         placeholder="Ej. 3171234567"
                         pattern="[0-9+ ]{7,15}"
                     >
+
                 </div>
 
                 <div class="service-form__group">
-                    <label class="service-form__label" for="fecha">Fecha del Servicio:</label>
+
+                    <label
+                        class="service-form__label"
+                        for="fecha"
+                    >
+                        Fecha del Servicio:
+                    </label>
+
                     <input
                         class="service-form__input"
                         type="date"
@@ -84,17 +183,28 @@
                         name="fecha"
                         required
                     >
+
                 </div>
 
             </fieldset>
 
-            <!-- SECCIÓN 2: MAQUINARIA -->
+            <!-- MAQUINARIA -->
+
             <fieldset class="service-form__section">
 
-                <legend class="service-form__legend">Información de la Maquinaria</legend>
+                <legend class="service-form__legend">
+                    Información de la Maquinaria
+                </legend>
 
                 <div class="service-form__group">
-                    <label class="service-form__label" for="serie">Número de Serie:</label>
+
+                    <label
+                        class="service-form__label"
+                        for="serie"
+                    >
+                        Número de Serie:
+                    </label>
+
                     <input
                         class="service-form__input"
                         type="text"
@@ -103,10 +213,18 @@
                         required
                         placeholder="Ej. JDX12345678"
                     >
+
                 </div>
 
                 <div class="service-form__group">
-                    <label class="service-form__label" for="observaciones">Observaciones Técnicas:</label>
+
+                    <label
+                        class="service-form__label"
+                        for="observaciones"
+                    >
+                        Observaciones Técnicas:
+                    </label>
+
                     <textarea
                         class="service-form__textarea"
                         id="observaciones"
@@ -115,17 +233,28 @@
                         required
                         placeholder="Detalles de la reparación o fallas..."
                     ></textarea>
+
                 </div>
 
             </fieldset>
 
-            <!-- SECCIÓN 3: MULTIMEDIA -->
+            <!-- MULTIMEDIA -->
+
             <fieldset class="service-form__section">
 
-                <legend class="service-form__legend">Evidencias Multimedia</legend>
+                <legend class="service-form__legend">
+                    Evidencias Multimedia
+                </legend>
 
                 <div class="service-form__group">
-                    <label class="service-form__label" for="foto">Capturar o Adjuntar Fotografías:</label>
+
+                    <label
+                        class="service-form__label"
+                        for="foto"
+                    >
+                        Capturar o Adjuntar Fotografías:
+                    </label>
+
                     <input
                         class="service-form__input"
                         type="file"
@@ -134,32 +263,67 @@
                         capture="environment"
                         multiple
                     >
-                    <div id="preview-foto" class="service-form__preview"></div>
+
+                    <div
+                        id="preview-foto"
+                        class="service-form__preview"
+                    ></div>
+
                 </div>
 
                 <div class="service-form__group">
-                    <label class="service-form__label">Grabar Nota de Voz:</label>
+
+                    <label class="service-form__label">
+                        Grabar Nota de Voz:
+                    </label>
+
                     <div class="audio-control">
-                        <button type="button" id="btn-record" class="audio-control__button audio-control__button--record">
+
+                        <button
+                            type="button"
+                            id="btn-record"
+                            class="audio-control__button audio-control__button--record"
+                        >
                             Grabar Audio
                         </button>
-                        <button type="button" id="btn-stop" class="audio-control__button audio-control__button--stop" disabled>
+
+                        <button
+                            type="button"
+                            id="btn-stop"
+                            class="audio-control__button audio-control__button--stop"
+                            disabled
+                        >
                             Detener
                         </button>
+
                     </div>
-                    <div id="preview-audio" class="service-form__preview"></div>
+
+                    <div
+                        id="preview-audio"
+                        class="service-form__preview"
+                    ></div>
+
                 </div>
 
             </fieldset>
 
             <!-- BOTONES -->
+
             <div class="service-form__actions">
 
-                <button type="button" id="btn-whatsapp" class="service-form__btn service-form__btn--whatsapp">
+                <button
+                    type="button"
+                    id="btn-whatsapp"
+                    class="service-form__btn service-form__btn--whatsapp"
+                >
                     Enviar por WhatsApp
                 </button>
 
-                <button type="submit" id="btn-email" class="service-form__btn service-form__btn--email">
+                <button
+                    type="submit"
+                    id="btn-email"
+                    class="service-form__btn service-form__btn--email"
+                >
                     Guardar y Enviar al Correo
                 </button>
 
@@ -169,20 +333,48 @@
 
     </main>
 
-    <!-- ✅ ÚNICO script JS — toda la lógica está en app.js -->
+    <!-- =====================================================
+         SCRIPTS
+    ====================================================== -->
+
+    <!-- BASE DE DATOS OFFLINE -->
+    <script src="./js/db.js" defer></script>
+
+    <!-- SINCRONIZACIÓN -->
+    <script src="./js/sync.js" defer></script>
+
+    <!-- APP PRINCIPAL -->
     <script src="./js/app.js" defer></script>
 
-    <!-- SERVICE WORKER -->
+    <!-- =====================================================
+         SERVICE WORKER
+    ====================================================== -->
+
     <script>
+
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(() => console.log('✅ Service Worker registrado correctamente.'))
-                    .catch(error => console.error('❌ Error registrando Service Worker:', error));
+
+            window.addEventListener('load', async () => {
+
+                try {
+
+                    await navigator.serviceWorker.register('./sw.js');
+
+                    console.log('✅ Service Worker registrado.');
+
+                } catch (error) {
+
+                    console.error(
+                        '❌ Error registrando Service Worker:',
+                        error
+                    );
+                }
             });
         }
+
     </script>
 
 </body>
 
 </html>
+```
