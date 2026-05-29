@@ -4,50 +4,23 @@
 <head>
 
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INFOTEC - SERVIDEERE</title>
 
     <!-- PWA -->
     <link rel="manifest" href="./manifest.json">
-
-    <meta
-        name="theme-color"
-        content="#1e293b"
-    >
+    <meta name="theme-color" content="#1e293b">
 
     <!-- ESTILOS -->
-    <link
-        rel="stylesheet"
-        href="./css/styles.css"
-    >
+    <link rel="stylesheet" href="./css/styles.css">
 
     <!-- FUENTES -->
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-    >
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
-        rel="stylesheet"
-    >
-
-    <!-- EMAILJS -->
-    <script
-        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"
-        defer
-    ></script>
+    <!-- EMAILJS — inicializado en el script al final -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
 
 </head>
 
@@ -59,48 +32,24 @@
         <header class="service-app__header">
 
             <div class="service-app__logo-container">
-
-                <img
-                    src="./servi_icon.jpg"
-                    alt="Logo INFOTEC SERVIDEERE"
-                    class="service-app__logo"
-                >
-
+                <img src="./servi_icon.jpg" alt="Logo INFOTEC SERVIDEERE" class="service-app__logo">
             </div>
 
-            <h1 class="service-app__title">
-                INFOTEC - SERVIDEERE
-            </h1>
-
-            <p class="service-app__subtitle">
-                Registro de Control Técnico
-            </p>
+            <h1 class="service-app__title">INFOTEC - SERVIDEERE</h1>
+            <p class="service-app__subtitle">Registro de Control Técnico</p>
 
         </header>
 
-        <!-- FORMULARIO -->
-       <form
-    id="form-servicio"
-    class="service-form"
-    action="https://formspree.io/f/TU_ID_AQUI"
-    method="POST"
-        >
-            <!-- CLIENTE -->
+        <!-- ✅ UN SOLO FORMULARIO — todo adentro -->
+        <form id="form-servicio" class="service-form">
+
+            <!-- SECCIÓN 1: CLIENTE -->
             <fieldset class="service-form__section">
 
-                <legend class="service-form__legend">
-                    Registro de Cliente y Servicio
-                </legend>
+                <legend class="service-form__legend">Registro de Cliente y Servicio</legend>
 
                 <div class="service-form__group">
-
-                    <label
-                        class="service-form__label"
-                        for="nombre"
-                    >
-                        Nombre del Cliente:
-                    </label>
-
+                    <label class="service-form__label" for="nombre">Nombre del Cliente:</label>
                     <input
                         class="service-form__input"
                         type="text"
@@ -110,18 +59,10 @@
                         autocomplete="name"
                         placeholder="Nombre completo del cliente"
                     >
-
                 </div>
 
                 <div class="service-form__group">
-
-                    <label
-                        class="service-form__label"
-                        for="telefono"
-                    >
-                        Número de Teléfono:
-                    </label>
-
+                    <label class="service-form__label" for="telefono">Número de Teléfono:</label>
                     <input
                         class="service-form__input"
                         type="tel"
@@ -133,18 +74,10 @@
                         placeholder="Ej. 3171234567"
                         pattern="[0-9+ ]{7,15}"
                     >
-
                 </div>
 
                 <div class="service-form__group">
-
-                    <label
-                        class="service-form__label"
-                        for="fecha"
-                    >
-                        Fecha del Servicio:
-                    </label>
-
+                    <label class="service-form__label" for="fecha">Fecha del Servicio:</label>
                     <input
                         class="service-form__input"
                         type="date"
@@ -152,40 +85,17 @@
                         name="fecha"
                         required
                     >
-
                 </div>
 
             </fieldset>
-           <fieldset class="service-form__section">
-                <legend class="service-form__legend">Información de la Maquinaria</legend>
-                <div class="service-form__group">
-                    <label class="service-form__label" for="serie">Número de Serie de la Máquina:</label>
-                    <input class="service-form__input" type="text" id="serie" name="serie" required>
-                </div>
-            </fieldset>
 
-            <button type="submit" class="service-form__button">
-                Enviar Registro
-            </button>
-
-        </form>
-
-            <!-- MAQUINARIA -->
+            <!-- SECCIÓN 2: MAQUINARIA — ✅ solo uno, con placeholder -->
             <fieldset class="service-form__section">
 
-                <legend class="service-form__legend">
-                    Información de la Maquinaria
-                </legend>
+                <legend class="service-form__legend">Información de la Maquinaria</legend>
 
                 <div class="service-form__group">
-
-                    <label
-                        class="service-form__label"
-                        for="serie"
-                    >
-                        Número de Serie:
-                    </label>
-
+                    <label class="service-form__label" for="serie">Número de Serie:</label>
                     <input
                         class="service-form__input"
                         type="text"
@@ -194,18 +104,10 @@
                         required
                         placeholder="Ej. JDX12345678"
                     >
-
                 </div>
 
                 <div class="service-form__group">
-
-                    <label
-                        class="service-form__label"
-                        for="observaciones"
-                    >
-                        Observaciones Técnicas:
-                    </label>
-
+                    <label class="service-form__label" for="observaciones">Observaciones Técnicas:</label>
                     <textarea
                         class="service-form__textarea"
                         id="observaciones"
@@ -214,27 +116,17 @@
                         required
                         placeholder="Detalles de la reparación o fallas..."
                     ></textarea>
-
                 </div>
 
             </fieldset>
 
-            <!-- MULTIMEDIA -->
+            <!-- SECCIÓN 3: MULTIMEDIA -->
             <fieldset class="service-form__section">
 
-                <legend class="service-form__legend">
-                    Evidencias Multimedia
-                </legend>
+                <legend class="service-form__legend">Evidencias Multimedia</legend>
 
                 <div class="service-form__group">
-
-                    <label
-                        class="service-form__label"
-                        for="foto"
-                    >
-                        Capturar o Adjuntar Fotografías:
-                    </label>
-
+                    <label class="service-form__label" for="foto">Capturar o Adjuntar Fotografías:</label>
                     <input
                         class="service-form__input"
                         type="file"
@@ -243,46 +135,20 @@
                         capture="environment"
                         multiple
                     >
-
-                    <div
-                        id="preview-foto"
-                        class="service-form__preview"
-                    ></div>
-
+                    <div id="preview-foto" class="service-form__preview"></div>
                 </div>
 
                 <div class="service-form__group">
-
-                    <label class="service-form__label">
-                        Grabar Nota de Voz:
-                    </label>
-
+                    <label class="service-form__label">Grabar Nota de Voz:</label>
                     <div class="audio-control">
-
-                        <button
-                            type="button"
-                            id="btn-record"
-                            class="audio-control__button audio-control__button--record"
-                        >
+                        <button type="button" id="btn-record" class="audio-control__button audio-control__button--record">
                             Grabar Audio
                         </button>
-
-                        <button
-                            type="button"
-                            id="btn-stop"
-                            class="audio-control__button audio-control__button--stop"
-                            disabled
-                        >
+                        <button type="button" id="btn-stop" class="audio-control__button audio-control__button--stop" disabled>
                             Detener
                         </button>
-
                     </div>
-
-                    <div
-                        id="preview-audio"
-                        class="service-form__preview"
-                    ></div>
-
+                    <div id="preview-audio" class="service-form__preview"></div>
                 </div>
 
             </fieldset>
@@ -290,37 +156,26 @@
             <!-- BOTONES -->
             <div class="service-form__actions">
 
-                <button
-                    type="button"
-                    id="btn-whatsapp"
-                    class="service-form__btn service-form__btn--whatsapp"
-                >
+                <button type="button" id="btn-whatsapp" class="service-form__btn service-form__btn--whatsapp">
                     Enviar por WhatsApp
                 </button>
 
-                <button
-                    type="submit"
-                    id="btn-email"
-                    class="service-form__btn service-form__btn--email"
-                >
+                <button type="submit" id="btn-email" class="service-form__btn service-form__btn--email">
                     Guardar y Enviar al Correo
                 </button>
 
             </div>
 
         </form>
+        <!-- ✅ CIERRE ÚNICO del formulario -->
 
     </main>
 
     <!-- JS PRINCIPAL -->
-    <script
-        src="./js/app.js"
-        defer
-    ></script>
+    <script src="./js/app.js" defer></script>
 
     <!-- WHATSAPP -->
     <script>
-
         document.getElementById('btn-whatsapp').addEventListener('click', () => {
 
             const nombre = document.getElementById('nombre').value.trim();
@@ -331,18 +186,13 @@
 
             // VALIDACIÓN
             if (!nombre || !telefono || !fecha || !serie || !observaciones) {
-
                 alert('Por favor complete todos los campos.');
-
                 return;
             }
 
-            // LIMPIAR TELÉFONO
+            // LIMPIAR TELÉFONO Y AGREGAR PREFIJO COLOMBIA
             let telefonoLimpio = telefono.replace(/\D/g, '');
-
-            // AGREGAR PREFIJO COLOMBIA
             if (!telefonoLimpio.startsWith('57')) {
-
                 telefonoLimpio = `57${telefonoLimpio}`;
             }
 
@@ -361,42 +211,64 @@ ${observaciones}
 📸 Las evidencias multimedia fueron respaldadas en el correo técnico.
 `;
 
-            // URL WHATSAPP
-            const urlWhatsapp =
-                `https://wa.me/${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
-
-            // ABRIR
+            // ABRIR WHATSAPP
+            const urlWhatsapp = `https://wa.me/${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
             window.open(urlWhatsapp, '_blank');
 
         });
+    </script>
 
+    <!-- EMAILJS: inicializar con tu Public Key -->
+    <script>
+        window.addEventListener('load', () => {
+            // ✅ Reemplaza 'TU_PUBLIC_KEY' con la clave de tu cuenta EmailJS
+            emailjs.init('TU_PUBLIC_KEY');
+        });
+
+        document.getElementById('form-servicio').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const nombre = document.getElementById('nombre').value.trim();
+            const telefono = document.getElementById('telefono').value.trim();
+            const fecha = document.getElementById('fecha').value;
+            const serie = document.getElementById('serie').value.trim();
+            const observaciones = document.getElementById('observaciones').value.trim();
+
+            if (!nombre || !telefono || !fecha || !serie || !observaciones) {
+                alert('Por favor complete todos los campos.');
+                return;
+            }
+
+            // ✅ Reemplaza 'TU_SERVICE_ID' y 'TU_TEMPLATE_ID' con los de tu cuenta EmailJS
+            emailjs.send('TU_SERVICE_ID', 'TU_TEMPLATE_ID', {
+                nombre,
+                telefono,
+                fecha,
+                serie,
+                observaciones
+            })
+            .then(() => {
+                alert('✅ Registro enviado al correo correctamente.');
+                e.target.reset();
+                document.getElementById('preview-foto').innerHTML = '';
+                document.getElementById('preview-audio').innerHTML = '';
+            })
+            .catch((error) => {
+                console.error('Error EmailJS:', error);
+                alert('❌ Error al enviar el correo. Revisa la consola.');
+            });
+        });
     </script>
 
     <!-- SERVICE WORKER -->
     <script>
-
         if ('serviceWorker' in navigator) {
-
             window.addEventListener('load', () => {
-
                 navigator.serviceWorker.register('./sw.js')
-
-                    .then(() => {
-
-                        console.log('Service Worker registrado correctamente.');
-
-                    })
-
-                    .catch(error => {
-
-                        console.error('Error registrando Service Worker:', error);
-
-                    });
-
+                    .then(() => console.log('✅ Service Worker registrado correctamente.'))
+                    .catch(error => console.error('❌ Error registrando Service Worker:', error));
             });
-
         }
-
     </script>
 
 </body>
