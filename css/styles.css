@@ -1,86 +1,616 @@
+/* =========================================================
+   SERVIDEERE - ESTILO PREMIUM MODERNO
+   Archivo: styles.css
+========================================================= */
+
 :root {
+
     --color-verde: #367c2b;
+
     --color-amarillo: #ffde00;
-    --color-oscuro: #212529;
-    --color-gris-fondo: #f4f6f7;
+
+    --color-oscuro: #111827;
+
+    --color-gris-fondo: #f4f7fb;
+
     --color-blanco: #ffffff;
+
     --color-whatsapp: #25d366;
+
     --color-email: #007bff;
+
     --fuente: 'Poppins', sans-serif;
-    --shadow: 0 4px 10px rgba(0,0,0,0.08);
-    --radius: 12px;
+
+    --shadow:
+        0 20px 50px rgba(0,0,0,0.12);
+
+    --radius: 24px;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* =========================================================
+   RESET
+========================================================= */
 
-body {
-    font-family: var(--fuente);
-    background-color: var(--color-gris-fondo);
-    color: var(--color-oscuro);
-    display: flex;
-    justify-content: center;
-    padding: 15px;
+*{
+
+    box-sizing:border-box;
+
+    margin:0;
+
+    padding:0;
 }
 
-.service-app {
-    width: 100%;
-    max-width: 480px;
-    background: var(--color-blanco);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    overflow: hidden;
+/* =========================================================
+   BODY
+========================================================= */
+
+body{
+
+    font-family:var(--fuente);
+
+    background:
+        linear-gradient(
+            135deg,
+            #eef2f7,
+            #dfe7f1
+        );
+
+    color:var(--color-oscuro);
+
+    display:flex;
+
+    justify-content:center;
+
+    padding:20px;
+
+    min-height:100vh;
 }
 
-.service-app__header {
-    background-color: var(--color-oscuro);
-    color: var(--color-blanco);
-    text-align: center;
-    padding: 25px 15px;
-    border-bottom: 5px solid var(--color-amarillo);
+/* =========================================================
+   CONTENEDOR PRINCIPAL
+========================================================= */
+
+.service-app{
+
+    width:100%;
+
+    max-width:540px;
+
+    background:
+        rgba(255,255,255,0.96);
+
+    backdrop-filter:blur(12px);
+
+    border-radius:var(--radius);
+
+    overflow:hidden;
+
+    box-shadow:var(--shadow);
+
+    border:
+        1px solid rgba(255,255,255,0.6);
+
+    animation:fadeUp .7s ease;
 }
 
-.service-app__logo-container {
-    width: 75px;
-    height: 75px;
-    margin: 0 auto 10px auto;
-    background: var(--color-blanco);
-    border-radius: 50%;
-    padding: 3px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* =========================================================
+   HEADER
+========================================================= */
+
+.service-app__header{
+
+    background:
+        linear-gradient(
+            135deg,
+            #111827,
+            #1f2937
+        );
+
+    color:var(--color-blanco);
+
+    text-align:center;
+
+    padding:45px 20px;
+
+    border-bottom:
+        5px solid var(--color-amarillo);
+
+    position:relative;
 }
 
-.service-app__logo { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-.service-app__title { font-size: 1.4rem; font-weight: 700; }
-.service-app__subtitle { font-size: 0.8rem; color: #a0aec0; text-transform: uppercase; }
+/* Línea decorativa */
 
-.service-form { padding: 15px; }
-.service-form__section { border: 1px solid #e2e8f0; border-radius: var(--radius); padding: 15px; margin-bottom: 15px; background: #fafafa; }
-.service-form__legend { font-weight: 600; font-size: 0.9rem; padding: 0 8px; color: var(--color-verde); }
-.service-form__group { margin-top: 12px; }
-.service-form__label { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px; }
+.service-app__header::after{
 
-.service-form__input, .service-form__textarea {
-    width: 100%; padding: 10px; font-family: var(--fuente); font-size: 0.85rem;
-    border: 1px solid #cbd5e1; border-radius: 6px; background: var(--color-blanco);
+    content:"";
+
+    position:absolute;
+
+    bottom:0;
+    left:0;
+
+    width:100%;
+
+    height:2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.5),
+            transparent
+        );
 }
 
-.service-form__input:focus, .service-form__textarea:focus {
-    outline: none; border-color: var(--color-verde); box-shadow: 0 0 0 3px rgba(54, 124, 43, 0.1);
+/* =========================================================
+   LOGO
+========================================================= */
+
+.service-app__logo-container{
+
+    width:100px;
+
+    height:100px;
+
+    margin:0 auto 18px auto;
+
+    background:var(--color-blanco);
+
+    border-radius:50%;
+
+    padding:4px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,.3);
 }
 
-.service-form__preview { margin-top: 10px; display: flex; gap: 5px; flex-wrap: wrap; }
-.service-form__preview img { width: 70px; height: 70px; object-fit: cover; border-radius: 4px; border: 1px solid #cbd5e1; }
+.service-app__logo{
 
-.audio-control { display: flex; gap: 8px; }
-.audio-control__button { flex: 1; padding: 10px; font-family: var(--fuente); font-size: 0.8rem; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; color: white; }
-.audio-control__button--record { background: #e53e3e; }
-.audio-control__button--stop { background: var(--color-oscuro); }
-.audio-control__button:disabled { background: #cbd5e1; cursor: not-allowed; }
+    width:100%;
 
-.service-form__actions { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
-.service-form__btn { width: 100%; padding: 12px; font-family: var(--fuente); font-size: 0.95rem; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; color: white; }
-.service-form__btn--whatsapp { background: var(--color-whatsapp); }
-.service-form__btn--email { background: var(--color-email); }
-.service-form__btn:active { transform: scale(0.99); }
+    height:100%;
+
+    object-fit:cover;
+
+    border-radius:50%;
+}
+
+/* =========================================================
+   TÍTULOS
+========================================================= */
+
+.service-app__title{
+
+    font-size:2rem;
+
+    font-weight:700;
+
+    letter-spacing:.5px;
+
+    margin-bottom:6px;
+}
+
+.service-app__subtitle{
+
+    font-size:.85rem;
+
+    color:#d1d5db;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+}
+
+/* =========================================================
+   FORMULARIO
+========================================================= */
+
+.service-form{
+
+    padding:22px;
+}
+
+/* =========================================================
+   SECCIONES
+========================================================= */
+
+.service-form__section{
+
+    border:none;
+
+    border-radius:20px;
+
+    padding:22px;
+
+    margin-bottom:20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #f8fafc
+        );
+
+    box-shadow:
+        0 6px 20px rgba(0,0,0,.05);
+
+    transition:.3s;
+}
+
+.service-form__section:hover{
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 12px 25px rgba(0,0,0,.08);
+}
+
+/* =========================================================
+   LEGEND
+========================================================= */
+
+.service-form__legend{
+
+    font-weight:700;
+
+    font-size:1rem;
+
+    padding:0 10px;
+
+    color:var(--color-verde);
+
+    margin-bottom:10px;
+}
+
+/* =========================================================
+   GRUPOS
+========================================================= */
+
+.service-form__group{
+
+    margin-top:16px;
+}
+
+/* =========================================================
+   LABELS
+========================================================= */
+
+.service-form__label{
+
+    display:block;
+
+    font-size:.88rem;
+
+    font-weight:600;
+
+    margin-bottom:7px;
+
+    color:#1f2937;
+}
+
+/* =========================================================
+   INPUTS
+========================================================= */
+
+.service-form__input,
+.service-form__textarea{
+
+    width:100%;
+
+    padding:14px;
+
+    font-family:var(--fuente);
+
+    font-size:.95rem;
+
+    border:
+        1px solid #d1d5db;
+
+    border-radius:14px;
+
+    background:var(--color-blanco);
+
+    transition:.3s;
+
+    box-shadow:
+        inset 0 1px 3px rgba(0,0,0,.04);
+}
+
+/* =========================================================
+   FOCUS
+========================================================= */
+
+.service-form__input:focus,
+.service-form__textarea:focus{
+
+    outline:none;
+
+    border-color:var(--color-verde);
+
+    box-shadow:
+        0 0 0 4px rgba(54,124,43,.12);
+
+    transform:
+        translateY(-2px);
+}
+
+/* =========================================================
+   TEXTAREA
+========================================================= */
+
+.service-form__textarea{
+
+    min-height:110px;
+
+    resize:vertical;
+}
+
+/* =========================================================
+   PREVIEW IMÁGENES
+========================================================= */
+
+.service-form__preview{
+
+    margin-top:12px;
+
+    display:flex;
+
+    gap:8px;
+
+    flex-wrap:wrap;
+}
+
+.service-form__preview img{
+
+    width:75px;
+
+    height:75px;
+
+    object-fit:cover;
+
+    border-radius:10px;
+
+    border:
+        1px solid #d1d5db;
+
+    box-shadow:
+        0 4px 10px rgba(0,0,0,.08);
+}
+
+/* =========================================================
+   AUDIO CONTROLS
+========================================================= */
+
+.audio-control{
+
+    display:flex;
+
+    gap:10px;
+}
+
+.audio-control__button{
+
+    flex:1;
+
+    padding:12px;
+
+    font-family:var(--fuente);
+
+    font-size:.85rem;
+
+    font-weight:600;
+
+    border:none;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    color:white;
+
+    transition:.3s;
+}
+
+.audio-control__button--record{
+
+    background:#dc2626;
+}
+
+.audio-control__button--stop{
+
+    background:#111827;
+}
+
+.audio-control__button:hover{
+
+    transform:
+        translateY(-2px);
+}
+
+.audio-control__button:disabled{
+
+    background:#cbd5e1;
+
+    cursor:not-allowed;
+}
+
+/* =========================================================
+   ACCIONES
+========================================================= */
+
+.service-form__actions{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:14px;
+
+    margin-top:20px;
+}
+
+/* =========================================================
+   BOTONES
+========================================================= */
+
+.service-form__btn{
+
+    width:100%;
+
+    padding:15px;
+
+    font-family:var(--fuente);
+
+    font-size:1rem;
+
+    font-weight:700;
+
+    border:none;
+
+    border-radius:14px;
+
+    cursor:pointer;
+
+    color:white;
+
+    transition:.3s;
+
+    box-shadow:
+        0 10px 20px rgba(0,0,0,.12);
+}
+
+/* =========================================================
+   BOTÓN WHATSAPP
+========================================================= */
+
+.service-form__btn--whatsapp{
+
+    background:
+        linear-gradient(
+            135deg,
+            #25d366,
+            #1ebe5d
+        );
+}
+
+/* =========================================================
+   BOTÓN EMAIL
+========================================================= */
+
+.service-form__btn--email{
+
+    background:
+        linear-gradient(
+            135deg,
+            #007bff,
+            #0056d2
+        );
+}
+
+/* =========================================================
+   HOVER BOTONES
+========================================================= */
+
+.service-form__btn:hover{
+
+    transform:
+        translateY(-3px);
+
+    filter:brightness(1.05);
+
+    box-shadow:
+        0 15px 30px rgba(0,0,0,.16);
+}
+
+/* =========================================================
+   ACTIVE
+========================================================= */
+
+.service-form__btn:active{
+
+    transform:scale(.98);
+}
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar{
+
+    width:8px;
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#cbd5e1;
+
+    border-radius:20px;
+}
+
+/* =========================================================
+   ANIMACIÓN
+========================================================= */
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:
+            translateY(20px);
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:768px){
+
+    body{
+
+        padding:12px;
+    }
+
+    .service-app{
+
+        max-width:100%;
+    }
+
+    .service-app__title{
+
+        font-size:1.7rem;
+    }
+
+    .service-form{
+
+        padding:16px;
+    }
+
+    .service-form__section{
+
+        padding:18px;
+    }
+
+    .service-form__input,
+    .service-form__textarea{
+
+        font-size:.9rem;
+    }
+}
