@@ -377,9 +377,9 @@ ${observaciones}
                    TEMPLATE_ID → tu plantilla en EmailJS
                    PUBLIC_KEY  → tu clave pública de EmailJS
                 ================================================ */
-                await emailjs.init('TU_PUBLIC_KEY');
+                await emailjs.init('uslSzyXbJH6rmsfGw');
 
-                await emailjs.send('TU_SERVICE_ID', 'TU_TEMPLATE_ID', {
+                await emailjs.send('service_ca8hppv', 'template_n7qw2gn', {
                     nombre,
                     telefono,
                     fecha,
