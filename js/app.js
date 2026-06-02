@@ -377,17 +377,19 @@ ${observaciones}
                    TEMPLATE_ID → tu plantilla en EmailJS
                    PUBLIC_KEY  → tu clave pública de EmailJS
                 ================================================ */
-                await emailjs.init('uslSzyXbJH6rmsfGw');
-
-                await emailjs.send('service_ca8hppv', 'template_n7qw2gn', {
-                    nombre,
-                    telefono,
-                    fecha,
-                    serie,
-                    observaciones,
-                    totalFotos,
-                    totalAudios
-                });
+                await emailjs.send(
+    'service_ca8hppv',
+    'template_n7qw2gn',
+    {
+        nombre: nombre,
+        telefono: telefono,
+        fecha: fecha,
+        serie: serie,
+        observaciones: observaciones,
+        fotos: archivosSeleccionados.length,
+        audios: grabaciones.filter(g => g !== null).length
+    }
+);
 
                 alert('✅ Registro enviado al correo correctamente.');
                 form.reset();
