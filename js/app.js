@@ -5,6 +5,9 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+    // Inicializar EmailJS con la Public Key
+    emailjs.init('usISzyXbJH6rmsfGw');
+
     /* =====================================================
        REFERENCIAS DOM
     ===================================================== */
